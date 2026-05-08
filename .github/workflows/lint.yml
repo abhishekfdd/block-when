@@ -1,0 +1,13 @@
+name: Lint
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    # Implementation deferred — see PLAN.md "Build, lint, test commands".
+    steps:
+      - run: 'true'
