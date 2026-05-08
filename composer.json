@@ -15,14 +15,14 @@
 		"wp-phpunit/wp-phpunit": "^6.5"
 	},
 	"autoload": {
-		"psr-4": {
-			"Block_When\\": "includes/"
-		}
+		"classmap": [
+			"includes/"
+		]
 	},
 	"autoload-dev": {
-		"psr-4": {
-			"Block_When\\Tests\\": "tests/phpunit/"
-		}
+		"classmap": [
+			"tests/phpunit/"
+		]
 	},
 	"scripts": {
 		"phpcs": "phpcs",
