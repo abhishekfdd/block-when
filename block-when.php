@@ -43,31 +43,32 @@ define( 'BLOCK_WHEN_BASENAME', plugin_basename( __FILE__ ) );
 define( 'BLOCK_WHEN_MIN_PHP', '7.4' );
 define( 'BLOCK_WHEN_MIN_WP', '6.5' );
 
-// Composer autoloader. Generated via `composer dump-autoload -o`.
-$autoloader = BLOCK_WHEN_DIR . 'vendor/autoload.php';
+// Bootstrap inside a closure to avoid leaking variables into the global scope.
+( static function (): void {
+	$autoloader = BLOCK_WHEN_DIR . 'vendor/autoload.php';
 
-if ( ! file_exists( $autoloader ) ) {
+	if ( ! file_exists( $autoloader ) ) {
+		add_action(
+			'admin_notices',
+			static function () {
+				printf(
+					'<div class="notice notice-error"><p>%s</p></div>',
+					esc_html__(
+						'Block When: Composer dependencies are missing. Run `composer install` in the plugin directory.',
+						'block-when'
+					)
+				);
+			}
+		);
+		return;
+	}
+
+	require_once $autoloader;
+
 	add_action(
-		'admin_notices',
-		static function () {
-			printf(
-				'<div class="notice notice-error"><p>%s</p></div>',
-				esc_html__(
-					'Block When: Composer dependencies are missing. Run `composer install` in the plugin directory.',
-					'block-when'
-				)
-			);
+		'plugins_loaded',
+		static function (): void {
+			Plugin::instance()->init();
 		}
 	);
-	return;
-}
-
-require_once $autoloader;
-
-// Boot.
-add_action(
-	'plugins_loaded',
-	static function (): void {
-		Plugin::instance()->init();
-	}
-);
+} )();

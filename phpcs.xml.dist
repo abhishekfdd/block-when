@@ -13,16 +13,34 @@
 	<arg value="sp"/>
 
 	<rule ref="WordPress-VIP-Go">
-    <!-- These sniffs target JS files, which we lint with ESLint instead. -->
-    <!-- Including them produces deprecation warnings in PHP_CodeSniffer 3.x -->
-    <!-- and will break entirely in 4.x. -->
-    <exclude name="WordPressVIPMinimum.JS.Window"/>
-    <exclude name="WordPressVIPMinimum.JS.DangerouslySetInnerHTML"/>
-    <exclude name="WordPressVIPMinimum.JS.InnerHTML"/>
-    <exclude name="WordPressVIPMinimum.JS.StrippingTags"/>
-    <exclude name="WordPressVIPMinimum.JS.StringConcat"/>
-    <exclude name="WordPressVIPMinimum.JS.HTMLExecutingFunctions"/>
-</rule>
+		<!-- These sniffs target JS files, which we lint with ESLint instead. -->
+		<!-- Including them produces deprecation warnings in PHP_CodeSniffer 3.x -->
+		<!-- and will break entirely in 4.x. -->
+		<exclude name="WordPressVIPMinimum.JS.Window"/>
+		<exclude name="WordPressVIPMinimum.JS.DangerouslySetInnerHTML"/>
+		<exclude name="WordPressVIPMinimum.JS.InnerHTML"/>
+		<exclude name="WordPressVIPMinimum.JS.StrippingTags"/>
+		<exclude name="WordPressVIPMinimum.JS.StringConcat"/>
+		<exclude name="WordPressVIPMinimum.JS.HTMLExecutingFunctions"/>
+	</rule>
+
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="block-when"/>
+			</property>
+		</properties>
+	</rule>
+
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<properties>
+			<property name="prefixes" type="array">
+				<element value="block_when"/>
+				<element value="Block_When"/>
+				<element value="BLOCK_WHEN"/>
+			</property>
+		</properties>
+	</rule>
 
 	<config name="testVersion" value="7.4-"/>
 	<rule ref="PHPCompatibilityWP"/>
