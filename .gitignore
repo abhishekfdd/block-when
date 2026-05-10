@@ -7,6 +7,7 @@ composer.lock
 
 # wp-env
 .wp-env.override.json
+.env.testing 
 
 # OS / editor
 .DS_Store
@@ -17,4 +18,5 @@ Thumbs.db
 # Logs / coverage
 *.log
 /coverage/
+.phpunit.cache/
 .phpunit.result.cache
