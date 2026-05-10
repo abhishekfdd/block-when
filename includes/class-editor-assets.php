@@ -31,6 +31,11 @@ final class Editor_Assets {
 	public const SCRIPT_HANDLE = 'block-when-editor';
 
 	/**
+	 * Style handle the editor stylesheet is registered under.
+	 */
+	public const STYLE_HANDLE = 'block-when-editor';
+
+	/**
 	 * Register hooks.
 	 *
 	 * Idempotent: re-calling does not double-register the action, mirroring
@@ -73,5 +78,29 @@ final class Editor_Assets {
 		);
 
 		wp_set_script_translations( self::SCRIPT_HANDLE, 'block-when' );
+
+		/*
+		 * Editor stylesheet for the block-list indicator. Built from
+		 * src/editor.scss into build/index.css alongside the JS bundle.
+		 *
+		 * The asset manifest only describes the JS, so we version the
+		 * stylesheet against the plugin version rather than a content
+		 * hash — acceptable because the file ships in the released zip
+		 * and changes only on plugin updates.
+		 *
+		 * The file_exists guard handles partial/dev builds: a contributor
+		 * running `npm run start` in watch mode may produce build/index.js
+		 * before the CSS lands on the very first compile, and we'd rather
+		 * skip the style than emit a 404.
+		 */
+		$style_path = BLOCK_WHEN_DIR . 'build/index.css';
+		if ( file_exists( $style_path ) ) {
+			wp_enqueue_style(
+				self::STYLE_HANDLE,
+				BLOCK_WHEN_URL . 'build/index.css',
+				array(),
+				BLOCK_WHEN_VERSION
+			);
+		}
 	}
 }

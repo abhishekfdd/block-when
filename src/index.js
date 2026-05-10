@@ -28,6 +28,12 @@ import './conditions/user-state';
 import './conditions/date-range';
 import './conditions/device';
 
+// Editor-only side-effect imports. `editor-indicator` registers a
+// BlockListBlock filter at module load. `editor.scss` is extracted to
+// build/index.css by wp-scripts and enqueued separately by PHP.
+import './editor-indicator';
+import './editor.scss';
+
 /**
  * Sentinel value for the "no rule" option in the condition-type
  * dropdown. Never persisted — selecting it sets `blockWhen` to `null`.

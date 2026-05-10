@@ -1,0 +1,29 @@
+/**
+ * Block When — editor-only styles.
+ *
+ * Loaded by Editor_Assets on `enqueue_block_editor_assets`. Front-end
+ * pages never see this stylesheet — hidden blocks are removed at render
+ * time, so there is nothing to style on the front end.
+ */
+
+/*
+ * Reserve the indicator gutter on every block in the editor canvas, so
+ * adding or removing a visibility rule does not nudge content sideways.
+ * The transparent left border occupies the same 3px the active rule's
+ * dashed border will, and the matching padding keeps the content origin
+ * fixed across both states. The selector is editor-only: it lives under
+ * `.editor-styles-wrapper`, which the WP editor renders around the block
+ * list and the front end does not.
+ */
+.editor-styles-wrapper .block-editor-block-list__block {
+	border-left: 3px solid transparent;
+	padding-left: 0.5em;
+}
+
+.editor-styles-wrapper .block-editor-block-list__block.has-block-when-rule {
+	/* `--wp-admin-theme-color` is exposed by WP 5.7+; the literal fallback
+	 * keeps the indicator visible on older cores or in iframes that
+	 * haven't inherited the variable. */
+	border-left-color: var(--wp-admin-theme-color, #007cba);
+	border-left-style: dashed;
+}
