@@ -1,0 +1,5 @@
+src/inspector-controls.js
+src/editor-indicator.js
+src/conditions/
+src/store/
+tests/e2e/

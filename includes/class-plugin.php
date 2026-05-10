@@ -90,6 +90,7 @@ final class Plugin {
 	 *      third parties use, which proves the path works.
 	 *   4. Wire the attribute extender.
 	 *   5. Wire the renderer with the registry injected.
+	 *   6. Wire the editor asset enqueuer.
 	 *
 	 * @return void
 	 */
@@ -120,5 +121,6 @@ final class Plugin {
 
 		( new Attribute_Extender() )->register_hooks();
 		( new Block_Renderer( $registry ) )->register_hooks();
+		( new Editor_Assets() )->register_hooks();
 	}
 }
