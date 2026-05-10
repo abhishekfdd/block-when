@@ -1,5 +1,5 @@
 src/inspector-controls.js
 src/editor-indicator.js
-src/conditions/
-src/store/
+src/conditions/date-range.js
+src/conditions/device.js
 tests/e2e/
