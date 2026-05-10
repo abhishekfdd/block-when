@@ -48,12 +48,17 @@ interface Interface_Condition {
 	 * surface — once shipped, do not change it.
 	 *
 	 * Conventions:
-	 *  - Lowercase, kebab-case (`user-state`, not `userState`).
+	 *  - Lowercase, snake_case, matching the regex `[a-z][a-z0-9_]*`
+	 *    (`user_state`, not `user-state` and not `userState`). This is
+	 *    the form every built-in ships with, the form documented in
+	 *    saved post markup, and the form covered by the registry-level
+	 *    regression test in test_plugin.php — mixing in hyphens silently
+	 *    breaks lookups at the renderer's unknown-id gate.
 	 *  - Globally unique. Third-party authors should namespace their ids
-	 *    (`acme/geofence`) to avoid collisions with built-ins.
+	 *    (`acme_geofence`) to avoid collisions with built-ins.
 	 *  - Must not be translated. This is a key, not a label.
 	 *
-	 * @return string Stable identifier, e.g. `user-state`.
+	 * @return string Stable identifier, e.g. `user_state`.
 	 */
 	public function get_id(): string;
 

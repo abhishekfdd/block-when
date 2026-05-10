@@ -36,7 +36,7 @@ final class User_State_Condition extends Abstract_Condition {
 	 * {@inheritDoc}
 	 */
 	public function get_id(): string {
-		return 'user-state';
+		return 'user_state';
 	}
 
 	/**

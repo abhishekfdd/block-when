@@ -152,9 +152,38 @@ final class Test_Plugin extends WP_UnitTestCase {
 
 		$registry = Conditions_Registry::instance();
 
-		$this->assertNotNull( $registry->get( 'user-state' ) );
+		$this->assertNotNull( $registry->get( 'user_state' ) );
 		$this->assertNotNull( $registry->get( 'date_range' ) );
 		$this->assertNotNull( $registry->get( 'device' ) );
+	}
+
+	/**
+	 * Every built-in condition id is snake_case (`[a-z][a-z0-9_]*`).
+	 *
+	 * Regression: an early build shipped with `user-state` (kebab) next to
+	 * `date_range` (snake), and the inconsistency silently broke saved post
+	 * markup whose `conditionId` used the snake form — the renderer's
+	 * unknown-id case kicked in and the block rendered as if no rule were
+	 * set. This test pins every built-in to the documented convention so
+	 * the inconsistency cannot creep back in.
+	 */
+	public function test_built_in_condition_ids_use_snake_case(): void {
+		Plugin::instance()->init();
+
+		$registry = Conditions_Registry::instance();
+
+		foreach ( array( 'user_state', 'date_range', 'device' ) as $expected_id ) {
+			$this->assertNotNull(
+				$registry->get( $expected_id ),
+				sprintf( 'Built-in condition "%s" must be registered under its snake_case id.', $expected_id )
+			);
+
+			$this->assertMatchesRegularExpression(
+				'/^[a-z][a-z0-9_]*$/',
+				$registry->get( $expected_id )->get_id(),
+				sprintf( 'Built-in condition id "%s" must match the snake_case convention.', $expected_id )
+			);
+		}
 	}
 
 	/**

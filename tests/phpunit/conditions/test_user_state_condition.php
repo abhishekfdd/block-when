@@ -60,7 +60,7 @@ final class Test_User_State_Condition extends WP_UnitTestCase {
 	 * get_id() returns the locked-in identifier.
 	 */
 	public function test_get_id_is_stable(): void {
-		$this->assertSame( 'user-state', $this->condition->get_id() );
+		$this->assertSame( 'user_state', $this->condition->get_id() );
 	}
 
 	/**

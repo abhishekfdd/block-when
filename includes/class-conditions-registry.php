@@ -106,7 +106,7 @@ final class Conditions_Registry {
 	/**
 	 * Get a condition by id.
 	 *
-	 * @param string $id Condition id, e.g. `user-state`.
+	 * @param string $id Condition id, e.g. `user_state`.
 	 * @return Interface_Condition|null Null when nothing is registered under that id.
 	 */
 	public function get( string $id ): ?Interface_Condition {
