@@ -22,9 +22,11 @@ import { createHigherOrderComponent } from '@wordpress/compose';
 import { getAllConditions, getCondition } from './store/conditions-registry';
 
 // Built-in condition modules. Each calls `registerCondition()` at import
-// time. Phase 3 will add `./conditions/date-range` and `./conditions/device`
-// alongside this one.
+// time, and the import order here is the order they appear in the
+// "Show this block when…" dropdown.
 import './conditions/user-state';
+import './conditions/date-range';
+import './conditions/device';
 
 /**
  * Sentinel value for the "no rule" option in the condition-type
