@@ -31,6 +31,13 @@
 
 declare( strict_types=1 );
 
+// The WP test suite (and wp-phpunit's install.php child process) mandates
+// these exact constant names and the $table_prefix variable. Renaming
+// would defeat the file's only purpose, so we suppress the prefix and
+// global-override sniffs file-wide.
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals
+// phpcs:disable WordPress.WP.GlobalVariablesOverride
+
 // Path to the WordPress install (the test suite loads wp-settings.php
 // from here). Default targets the Local install three levels up from
 // this plugin directory: block-when -> plugins -> wp-content -> public.
