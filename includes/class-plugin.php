@@ -3,8 +3,8 @@
  * Main plugin orchestrator.
  *
  * Singleton entry point. Wires the conditions registry, attribute extender,
- * block renderer, and editor assets together. Reviewers should start here
- * to follow the plugin's wiring.
+ * and block renderer together on `plugins_loaded`. Reviewers and
+ * contributors looking for behaviour should start here.
  *
  * @package Block_When
  */
@@ -13,13 +13,19 @@ declare( strict_types=1 );
 
 namespace Block_When;
 
+use Block_When\Conditions\Date_Range_Condition;
+use Block_When\Conditions\Device_Condition;
+use Block_When\Conditions\User_State_Condition;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
  * Plugin orchestrator.
  *
- * Holds references to the long-lived service objects and runs them on
- * the appropriate WordPress hooks.
+ * The registry is intentionally not stored on this singleton and not
+ * exposed via an accessor — the renderer that needs it receives it by
+ * constructor injection, and third-party code reaches the registry via
+ * the public `block_when_register_conditions` action argument.
  */
 final class Plugin {
 
@@ -31,25 +37,34 @@ final class Plugin {
 	private static ?Plugin $instance = null;
 
 	/**
-	 * Conditions registry instance.
+	 * Whether {@see init()} has already run.
 	 *
-	 * @var Conditions_Registry|null
+	 * Set to true at the *start* of init() before any work, so a partial
+	 * failure mid-boot does not leave the plugin half-wired and re-runnable
+	 * on a retry — better to fail loud than to double-register hooks.
+	 *
+	 * @var bool
 	 */
-	private ?Conditions_Registry $registry = null;
+	private static bool $initialized = false;
 
 	/**
-	 * Block renderer instance.
-	 *
-	 * @var Block_Renderer|null
+	 * Singleton — use {@see Plugin::instance()}.
 	 */
-	private ?Block_Renderer $renderer = null;
+	private function __construct() {}
 
 	/**
-	 * Attribute extender instance.
-	 *
-	 * @var Attribute_Extender|null
+	 * Singletons are not cloneable.
 	 */
-	private ?Attribute_Extender $extender = null;
+	private function __clone() {}
+
+	/**
+	 * Singletons are not unserializable.
+	 *
+	 * @throws \LogicException Always.
+	 */
+	public function __wakeup() {
+		throw new \LogicException( 'Cannot unserialize Plugin.' );
+	}
 
 	/**
 	 * Get (or create) the singleton instance.
@@ -64,25 +79,46 @@ final class Plugin {
 	}
 
 	/**
-	 * Private constructor — use {@see Plugin::instance()}.
-	 */
-	private function __construct() {}
-
-	/**
 	 * Boot the plugin. Called once on `plugins_loaded`.
+	 *
+	 * Order:
+	 *   1. Load the plugin text domain.
+	 *   2. Resolve the conditions registry.
+	 *   3. Hook our own callback into `block_when_register_conditions`
+	 *      that registers the three built-in conditions, then bootstrap
+	 *      the registry — built-ins go through the same public action
+	 *      third parties use, which proves the path works.
+	 *   4. Wire the attribute extender.
+	 *   5. Wire the renderer with the registry injected.
 	 *
 	 * @return void
 	 */
 	public function init(): void {
-		// Implementation deferred.
-	}
+		if ( self::$initialized ) {
+			return;
+		}
+		self::$initialized = true;
 
-	/**
-	 * Accessor for the conditions registry.
-	 *
-	 * @return Conditions_Registry
-	 */
-	public function registry(): Conditions_Registry {
-		// Implementation deferred.
+		load_plugin_textdomain(
+			'block-when',
+			false,
+			dirname( BLOCK_WHEN_BASENAME ) . '/languages'
+		);
+
+		$registry = Conditions_Registry::instance();
+
+		add_action(
+			'block_when_register_conditions',
+			static function ( Conditions_Registry $registering_into ): void {
+				$registering_into->register( new User_State_Condition() );
+				$registering_into->register( new Date_Range_Condition() );
+				$registering_into->register( new Device_Condition() );
+			}
+		);
+
+		$registry->bootstrap();
+
+		( new Attribute_Extender() )->register_hooks();
+		( new Block_Renderer( $registry ) )->register_hooks();
 	}
 }
