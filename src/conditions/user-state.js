@@ -57,18 +57,26 @@ const DEFAULT_ROLES = [
 /**
  * Derive the active mode from a `states` array.
  *
- * If any entry is a `role:*` token we are in "roles" mode — even when
- * `logged_in` is also present, because the persisted shape supports
- * mixing them but the UI in v1.0 does not expose that combination.
+ * An empty array maps to "Specific roles" — that is the shape produced
+ * by `handleModeChange( MODE_ROLES )` before the user has added any
+ * tokens, and treating it as LOGGED_IN here was the Phase 2 bug that
+ * made the FormTokenField never appear. If any entry is a `role:*`
+ * token we are likewise in roles mode, even when `logged_in` is also
+ * present — the persisted shape supports mixing but the v1.0 UI does
+ * not expose that combination.
+ *
+ * Non-array input falls back to LOGGED_IN as a defensive default;
+ * normal flow always provides an array via `defaultSettings()`.
  *
  * @param {string[]} states Persisted `states` array.
  * @return {string} One of MODE_LOGGED_IN, MODE_LOGGED_OUT, MODE_ROLES.
  */
 function deriveMode( states ) {
-	if ( ! Array.isArray( states ) || states.length === 0 ) {
+	if ( ! Array.isArray( states ) ) {
 		return MODE_LOGGED_IN;
 	}
 	if (
+		states.length === 0 ||
 		states.some(
 			( s ) => typeof s === 'string' && s.startsWith( ROLE_PREFIX )
 		)
@@ -128,7 +136,7 @@ function roleLabelsToStates( labels ) {
  * @param {Function} props.onChange   Called with a new settings object.
  * @return {JSX.Element} Settings UI.
  */
-function UserStateSettings( { settings, onChange } ) {
+export function UserStateSettings( { settings, onChange } ) {
 	const states =
 		settings && Array.isArray( settings.states ) ? settings.states : [];
 	const mode = deriveMode( states );
