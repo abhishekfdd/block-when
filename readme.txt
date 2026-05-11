@@ -2,7 +2,7 @@
 Contributors:      abhishekfdd
 Tags:              block editor, gutenberg, visibility, conditional, blocks
 Requires at least: 6.5
-Tested up to:      6.7
+Tested up to:      6.9
 Requires PHP:      7.4
 Stable tag:        1.0.0
 License:           GPLv2 or later
@@ -22,6 +22,8 @@ It is built around two ideas that set it apart from other visibility plugins:
 
 * **Server-side rendering only.** When a block is hidden by a condition, it is not rendered into the page output at all. No CSS `display: none`, no DOM bloat, no leaked content in view-source. Search engines, screen readers, and your page weight all benefit.
 * **Public Conditions API.** The three built-in conditions are registered through the same public API your plugin or theme can use to add your own. No hacks, no internal-only code paths.
+
+In the editor, a subtle dashed border marks every block that carries a visibility rule, so a rule-bearing block never disappears from the published page as a surprise. A "Preview as audience" sidebar lets you simulate a logged-out visitor, a specific role, or a different device class right in the editor — blocks whose rule would hide them fade out with a clear badge, no save-and-reload cycle required.
 
 = Built-in conditions (v1.0) =
 
@@ -126,6 +128,14 @@ Hidden blocks are never rendered into the page HTML. Search engines see what you
 
 Not in v1.0 — one rule per block. AND/OR condition groups are planned for v1.1.
 
+= What does the dashed border on some blocks mean? =
+
+The dashed left border indicates a block has a visibility rule attached. It's editor-only — visitors never see it. The cue helps prevent confusion when blocks disappear from the published version.
+
+= Why do role-restricted blocks appear hidden when I preview as "Any role"? =
+
+Block When's preview can't know which roles an arbitrary visitor would have. When you preview as "Any role," role-restricted blocks appear hidden because the safest assumption is that an unknown visitor doesn't have the required role. To verify a role-restricted block actually shows for that role, pick the specific role from the preview dropdown.
+
 = How does this compare to Block Visibility or Conditional Blocks? =
 
 Both are excellent, mature plugins with broader feature sets. Block When is intentionally smaller in surface area, server-side-only in rendering, and built around a public extension API. If you need ACF/WooCommerce/cookie conditions today, use one of those. If you want a small, fast, extensible foundation, this is for you.
@@ -141,9 +151,11 @@ Mostly yes — visibility is evaluated at render time, so server-side page cache
 == Screenshots ==
 
 1. The Visibility panel in the block inspector
-2. Editor indicator showing a block has an active visibility rule
-3. Date range condition with timezone-aware datetime pickers
-4. User role selector with multi-select support
+2. User State condition with role selector
+3. Date Range condition with start/end pickers
+4. Device type condition with three checkboxes
+5. Editor indicator showing dashed border on rule-bearing blocks
+6. Preview-as sidebar with audience controls
 
 == Changelog ==
 
