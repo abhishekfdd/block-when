@@ -8,6 +8,8 @@ composer.lock
 # wp-env
 .wp-env.override.json
 .env.testing 
+.env.*
+
 
 # OS / editor
 .DS_Store
@@ -20,3 +22,6 @@ Thumbs.db
 /coverage/
 .phpunit.cache/
 .phpunit.result.cache
+
+# Build artifacts
+*.zip

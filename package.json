@@ -1,5 +1,5 @@
 {
-	"name": "@block-when/editor",
+	"name": "block-when",
 	"version": "1.0.0",
 	"description": "Editor JS for the Block When WordPress plugin.",
 	"private": true,

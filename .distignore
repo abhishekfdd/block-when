@@ -1,8 +1,12 @@
 .distignore
 .editorconfig
+.eslintignore
+.env.testing
 .git
 .github
 .gitignore
+.phpunit.cache
+.phpunit.result.cache
 .wp-env.json
 .wp-env.override.json
 PLAN.md
@@ -17,3 +21,6 @@ phpunit.xml.dist
 src
 tests
 vendor
+wp-tests-config.php
+*.zip
+.DS_Store
