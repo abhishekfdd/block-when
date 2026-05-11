@@ -12,10 +12,6 @@
  * approximate by checking all three boxes — a sensible no-op starting
  * point that turns into a real constraint as soon as the user unticks
  * one.
- *
- * TODO(Phase 4): expose an `evaluate( settings )` so the editor's
- * "preview as device" toggle can drive a live show/hide preview.
- * Until then, server-side evaluation is the only source of truth.
  */
 
 import { CheckboxControl } from '@wordpress/components';
@@ -77,9 +73,31 @@ export function DeviceSettings( { settings, onChange } ) {
 	);
 }
 
+/**
+ * Editor-side mirror of `Device_Condition::evaluate()`.
+ *
+ * Empty `devices` is "no constraint" — matches PHP, which returns true
+ * before consulting the detected device. Otherwise the previewed device
+ * must appear in the configured list.
+ *
+ * @param {Object} settings       Persisted settings, `{ devices: string[] }`.
+ * @param {Object} previewContext Simulated audience. `{ loggedIn: boolean, role: string|null, device: string }`.
+ * @return {boolean} True if the block should render for this audience.
+ */
+export function evaluate( settings, previewContext ) {
+	const devices =
+		settings && Array.isArray( settings.devices ) ? settings.devices : [];
+	if ( devices.length === 0 ) {
+		return true;
+	}
+	const device = previewContext && previewContext.device;
+	return devices.includes( device );
+}
+
 registerCondition( {
 	id: 'device',
 	label: __( 'Device type', 'block-when' ),
 	SettingsComponent: DeviceSettings,
 	defaultSettings: () => ( { devices: [ 'desktop', 'tablet', 'mobile' ] } ),
+	evaluate,
 } );

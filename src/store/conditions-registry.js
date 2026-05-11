@@ -38,6 +38,10 @@
  * @property {string}   label             Human-readable, i18n-ready label for the condition-type dropdown.
  * @property {Function} SettingsComponent React component receiving `{ settings, onChange }`.
  * @property {Function} defaultSettings   Returns the initial settings object when the condition is first chosen.
+ * @property {Function} evaluate          `( settings, previewContext ) => boolean`. Editor-side mirror of the PHP `evaluate()`,
+ *                                        used by the "Preview as audience" sidebar to fade blocks whose rule would hide them
+ *                                        for the simulated audience. `previewContext` shape:
+ *                                        `{ loggedIn: boolean, role: string|null, device: 'desktop'|'tablet'|'mobile', now?: Date }`.
  */
 
 /**

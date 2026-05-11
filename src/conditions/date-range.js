@@ -17,11 +17,6 @@
  * `2026-05-10T14:30:00`. The two helpers at the top of this file are
  * the entire bridge between those formats — they're tiny on purpose so
  * the contract is easy to audit alongside the PHP class.
- *
- * TODO(Phase 4): add an `evaluate( settings )` export so the editor
- * can preview visibility against the picked window without a round-trip
- * to PHP. Until then, server-side evaluation is the only source of
- * truth for whether a block actually renders.
  */
 
 import { CheckboxControl, DateTimePicker } from '@wordpress/components';
@@ -146,9 +141,85 @@ export function DateRangeSettings( { settings, onChange } ) {
 	);
 }
 
+/**
+ * Parse a stored `Y-m-d H:i:s` bound into a local-time Date.
+ *
+ * The PHP evaluator interprets the same string in the site's configured
+ * timezone via `wp_timezone()`. The editor preview deliberately treats
+ * the wall-clock value as local time — the editor displays local time
+ * and the user picks "the same configured moment" regardless of where
+ * the request is served from. See the class docblock on
+ * `Date_Range_Condition` for the policy.
+ *
+ * Returns null on malformed input so the caller can collapse the bound
+ * to "open-ended on that side", matching PHP's bail-on-parse-failure
+ * branch.
+ *
+ * @param {unknown} bound Stored bound, e.g. "2026-05-10 14:30:00".
+ * @return {Date|null} Parsed local-time Date, or null.
+ */
+function parseBound( bound ) {
+	if ( typeof bound !== 'string' || bound === '' ) {
+		return null;
+	}
+	const match = /^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/.exec(
+		bound
+	);
+	if ( ! match ) {
+		return null;
+	}
+	const [ , y, mo, d, h, mi, s ] = match;
+	const date = new Date(
+		Number( y ),
+		Number( mo ) - 1,
+		Number( d ),
+		Number( h ),
+		Number( mi ),
+		Number( s )
+	);
+	return Number.isNaN( date.getTime() ) ? null : date;
+}
+
+/**
+ * Editor-side mirror of `Date_Range_Condition::evaluate()`.
+ *
+ * Returns true when `previewContext.now` is inside the inclusive
+ * `[start, end]` window. Either bound may be null/empty/unparseable,
+ * which is treated as open-ended on that side (the PHP `is_bound` plus
+ * parse-failure branches collapsed into one `parseBound` helper here).
+ * Both bounds open => always visible. The comparison uses JS Date
+ * ordering, which is total over valid Dates.
+ *
+ * @param {Object} settings       Persisted settings, `{ start, end }`.
+ * @param {Object} previewContext Simulated audience. `{ loggedIn, role, device, now: Date|undefined }`; `now` defaults to current time.
+ * @return {boolean} True if the block should render for this audience.
+ */
+export function evaluate( settings, previewContext ) {
+	const start = parseBound( settings && settings.start );
+	const end = parseBound( settings && settings.end );
+
+	if ( start === null && end === null ) {
+		return true;
+	}
+
+	const now =
+		previewContext && previewContext.now instanceof Date
+			? previewContext.now
+			: new Date();
+
+	if ( start !== null && now < start ) {
+		return false;
+	}
+	if ( end !== null && now > end ) {
+		return false;
+	}
+	return true;
+}
+
 registerCondition( {
 	id: 'date_range',
 	label: __( 'Date range', 'block-when' ),
 	SettingsComponent: DateRangeSettings,
 	defaultSettings: () => ( { start: null, end: null } ),
+	evaluate,
 } );

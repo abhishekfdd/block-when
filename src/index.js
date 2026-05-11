@@ -28,10 +28,17 @@ import './conditions/user-state';
 import './conditions/date-range';
 import './conditions/device';
 
-// Editor-only side-effect imports. `editor-indicator` registers a
-// BlockListBlock filter at module load. `editor.scss` is extracted to
-// build/index.css by wp-scripts and enqueued separately by PHP.
+// Editor-only side-effect imports. `editor-indicator` and
+// `preview-renderer` each register a BlockListBlock filter at module
+// load. `preview-sidebar` registers a PluginSidebar. `editor.scss` is
+// extracted to build/index.css by wp-scripts and enqueued separately
+// by PHP. The preview store import is what executes the
+// `registerStore()` call the sidebar and renderer rely on; it must
+// run before the modules that read from it.
+import './store/preview-mode';
 import './editor-indicator';
+import './preview-renderer';
+import './preview-sidebar';
 import './editor.scss';
 
 /**

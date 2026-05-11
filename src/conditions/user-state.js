@@ -199,9 +199,74 @@ export function UserStateSettings( { settings, onChange } ) {
 	);
 }
 
+/**
+ * Editor-side mirror of `User_State_Condition::evaluate()`.
+ *
+ * Walks the persisted `states` array with OR semantics — visibility is
+ * granted as soon as one entry matches the previewed audience. Empty /
+ * malformed input resolves to "always visible", matching the PHP-side
+ * "never silently hide on bad input" policy.
+ *
+ * The `role:X` arm intentionally requires an exact slug match against
+ * `previewContext.role`. A null preview role models "Any role" — and
+ * since we can't know which roles the visitor has, a role-restricted
+ * block is treated as hidden under that audience.
+ *
+ * @param {Object} settings       Persisted settings, `{ states: string[] }`.
+ * @param {Object} previewContext Simulated audience. `{ loggedIn: boolean, role: string|null, device: string }`.
+ * @return {boolean} True if the block should render for this audience.
+ */
+export function evaluate( settings, previewContext ) {
+	const states =
+		settings && Array.isArray( settings.states ) ? settings.states : [];
+
+	if ( states.length === 0 ) {
+		return true;
+	}
+
+	const loggedIn = Boolean( previewContext && previewContext.loggedIn );
+	const role =
+		previewContext && typeof previewContext.role === 'string'
+			? previewContext.role
+			: null;
+
+	for ( const state of states ) {
+		if ( typeof state !== 'string' || state === '' ) {
+			continue;
+		}
+		if ( state === 'logged_in' ) {
+			if ( loggedIn ) {
+				return true;
+			}
+			continue;
+		}
+		if ( state === 'logged_out' ) {
+			if ( ! loggedIn ) {
+				return true;
+			}
+			continue;
+		}
+		if ( state.startsWith( ROLE_PREFIX ) ) {
+			if ( ! loggedIn ) {
+				continue;
+			}
+			const slug = state.slice( ROLE_PREFIX.length );
+			if ( slug === '' ) {
+				continue;
+			}
+			if ( role !== null && slug === role ) {
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
 registerCondition( {
 	id: 'user_state',
 	label: __( 'User state', 'block-when' ),
 	SettingsComponent: UserStateSettings,
 	defaultSettings: () => ( { states: [ 'logged_in' ] } ),
+	evaluate,
 } );
