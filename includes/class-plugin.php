@@ -82,15 +82,14 @@ final class Plugin {
 	 * Boot the plugin. Called once on `plugins_loaded`.
 	 *
 	 * Order:
-	 *   1. Load the plugin text domain.
-	 *   2. Resolve the conditions registry.
-	 *   3. Hook our own callback into `block_when_register_conditions`
+	 *   1. Resolve the conditions registry.
+	 *   2. Hook our own callback into `block_when_register_conditions`
 	 *      that registers the three built-in conditions, then bootstrap
 	 *      the registry — built-ins go through the same public action
 	 *      third parties use, which proves the path works.
-	 *   4. Wire the attribute extender.
-	 *   5. Wire the renderer with the registry injected.
-	 *   6. Wire the editor asset enqueuer.
+	 *   3. Wire the attribute extender.
+	 *   4. Wire the renderer with the registry injected.
+	 *   5. Wire the editor asset enqueuer.
 	 *
 	 * @return void
 	 */
@@ -99,12 +98,6 @@ final class Plugin {
 			return;
 		}
 		self::$initialized = true;
-
-		load_plugin_textdomain(
-			'block-when',
-			false,
-			dirname( BLOCK_WHEN_BASENAME ) . '/languages'
-		);
 
 		$registry = Conditions_Registry::instance();
 
