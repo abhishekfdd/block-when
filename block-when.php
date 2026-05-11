@@ -27,7 +27,8 @@ defined( 'ABSPATH' ) || exit;
  *
  * Its only responsibilities are:
  *   1. Define plugin constants.
- *   2. Load the autoloader.
+ *   2. Register a hand-written PSR-4 autoloader for Block_When\ classes,
+ *      following the WPCS file-naming conventions used in includes/.
  *   3. Hand off to Block_When\Plugin::instance()->init().
  *
  * Reviewers and contributors looking for behaviour should start in
@@ -45,25 +46,45 @@ define( 'BLOCK_WHEN_MIN_WP', '6.5' );
 
 // Bootstrap inside a closure to avoid leaking variables into the global scope.
 ( static function (): void {
-	$autoloader = BLOCK_WHEN_DIR . 'vendor/autoload.php';
+	spl_autoload_register(
+		static function ( string $class_name ): void {
+			$prefix = 'Block_When\\';
 
-	if ( ! file_exists( $autoloader ) ) {
-		add_action(
-			'admin_notices',
-			static function () {
-				printf(
-					'<div class="notice notice-error"><p>%s</p></div>',
-					esc_html__(
-						'Block When: Composer dependencies are missing. Run `composer install` in the plugin directory.',
-						'block-when'
-					)
-				);
+			if ( 0 !== strpos( $class_name, $prefix ) ) {
+				return;
 			}
-		);
-		return;
-	}
 
-	require_once $autoloader;
+			$relative = substr( $class_name, strlen( $prefix ) );
+			$segments = explode( '\\', $relative );
+			$leaf     = array_pop( $segments );
+
+			$directory = BLOCK_WHEN_DIR . 'includes/';
+			if ( ! empty( $segments ) ) {
+				$directory .= strtolower( str_replace( '_', '-', implode( '/', $segments ) ) ) . '/';
+			}
+
+			$leaf_slug = strtolower( str_replace( '_', '-', $leaf ) );
+
+			// WPCS file-naming conventions used in this codebase:
+			//   - Concrete class Foo_Bar    → class-foo-bar.php
+			//   - Abstract class Abstract_X → abstract-x.php  (marker IS the prefix)
+			//   - Interface    Interface_X  → interface-x.php (marker IS the prefix)
+			// The Abstract_/Interface_ marker in the class name maps directly
+			// onto the filename prefix — it does not double up.
+			$candidates = array( 'class-' . $leaf_slug . '.php' );
+			if ( 0 === strpos( $leaf_slug, 'abstract-' ) || 0 === strpos( $leaf_slug, 'interface-' ) ) {
+				$candidates[] = $leaf_slug . '.php';
+			}
+
+			foreach ( $candidates as $filename ) {
+				$candidate = $directory . $filename;
+				if ( file_exists( $candidate ) ) {
+					require_once $candidate;
+					return;
+				}
+			}
+		}
+	);
 
 	add_action(
 		'plugins_loaded',
