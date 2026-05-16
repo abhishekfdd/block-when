@@ -1,17 +1,17 @@
 <?php
 /**
- * Tests for {@see Block_When\Editor_Assets}.
+ * Tests for {@see RenderWhen\Editor_Assets}.
  *
- * @package Block_When
+ * @package RenderWhen
  */
 
 declare( strict_types=1 );
 
-namespace Block_When\Tests;
+namespace RenderWhen\Tests;
 
-use Block_When\Conditions_Registry;
-use Block_When\Editor_Assets;
-use Block_When\Plugin;
+use RenderWhen\Conditions_Registry;
+use RenderWhen\Editor_Assets;
+use RenderWhen\Plugin;
 use ReflectionClass;
 use WP_UnitTestCase;
 

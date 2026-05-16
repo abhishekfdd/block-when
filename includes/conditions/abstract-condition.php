@@ -8,12 +8,12 @@
  * should call at the top of `evaluate()` to coerce the incoming
  * `$settings` array against the schema before reading from it.
  *
- * @package Block_When
+ * @package RenderWhen
  */
 
 declare( strict_types=1 );
 
-namespace Block_When\Conditions;
+namespace RenderWhen\Conditions;
 
 defined( 'ABSPATH' ) || exit;
 

@@ -1,5 +1,5 @@
 /**
- * Block When — JS conditions registry.
+ * RenderWhen — JS conditions registry.
  *
  * Mirror of the PHP `Conditions_Registry` for the editor. Exposes a tiny
  * imperative API that condition modules call at module load time to make
@@ -8,7 +8,7 @@
  * This module is the public extension surface for the JS side. A third
  * party adding a custom condition does so the same way the built-ins do:
  *
- *     import { registerCondition } from '@block-when/editor/store/conditions-registry';
+ *     import { registerCondition } from '@renderwhen/editor/store/conditions-registry';
  *
  *     registerCondition( {
  *         id: 'my_custom_condition',           // Must match PHP get_id() exactly.
@@ -19,7 +19,7 @@
  *
  * The `id` MUST be identical to the value returned by the PHP-side
  * `Interface_Condition::get_id()` for the same condition — the editor
- * writes that id into the block's `blockWhen.conditionId` attribute, and
+ * writes that id into the block's `renderWhen.conditionId` attribute, and
  * the server-side renderer looks the condition up by it. Mismatches
  * produce silent rendering failures, so duplicate JS-side registration
  * throws to surface mistakes immediately during development.
@@ -67,7 +67,7 @@ const conditions = new Map();
 export function registerCondition( condition ) {
 	if ( conditions.has( condition.id ) ) {
 		throw new Error(
-			`Block When: condition "${ condition.id }" is already registered.`
+			`RenderWhen: condition "${ condition.id }" is already registered.`
 		);
 	}
 	conditions.set( condition.id, condition );

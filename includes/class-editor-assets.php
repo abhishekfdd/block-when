@@ -8,17 +8,17 @@
  * either: a missing manifest is a missing build and we fail loudly via
  * `require` rather than silently enqueueing a script with no deps.
  *
- * @package Block_When
+ * @package RenderWhen
  */
 
 declare( strict_types=1 );
 
-namespace Block_When;
+namespace RenderWhen;
 
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Enqueues the Block When editor script.
+ * Enqueues the RenderWhen editor script.
  */
 final class Editor_Assets {
 
@@ -28,12 +28,12 @@ final class Editor_Assets {
 	 * Exposed so tests (and any third-party JS that wants to depend on
 	 * our bundle) can reference the same string we register with.
 	 */
-	public const SCRIPT_HANDLE = 'block-when-editor';
+	public const SCRIPT_HANDLE = 'renderwhen-editor';
 
 	/**
 	 * Style handle the editor stylesheet is registered under.
 	 */
-	public const STYLE_HANDLE = 'block-when-editor';
+	public const STYLE_HANDLE = 'renderwhen-editor';
 
 	/**
 	 * Register hooks.
@@ -65,19 +65,19 @@ final class Editor_Assets {
 	 * @return void
 	 */
 	public function enqueue(): void {
-		$asset_file = BLOCK_WHEN_DIR . 'build/index.asset.php';
+		$asset_file = RENDERWHEN_DIR . 'build/index.asset.php';
 
 		$asset = require $asset_file;
 
 		wp_enqueue_script(
 			self::SCRIPT_HANDLE,
-			BLOCK_WHEN_URL . 'build/index.js',
+			RENDERWHEN_URL . 'build/index.js',
 			$asset['dependencies'],
 			$asset['version'],
 			true
 		);
 
-		wp_set_script_translations( self::SCRIPT_HANDLE, 'block-when' );
+		wp_set_script_translations( self::SCRIPT_HANDLE, 'renderwhen' );
 
 		/*
 		 * Editor stylesheet for the block-list indicator. Built from
@@ -93,13 +93,13 @@ final class Editor_Assets {
 		 * before the CSS lands on the very first compile, and we'd rather
 		 * skip the style than emit a 404.
 		 */
-		$style_path = BLOCK_WHEN_DIR . 'build/index.css';
+		$style_path = RENDERWHEN_DIR . 'build/index.css';
 		if ( file_exists( $style_path ) ) {
 			wp_enqueue_style(
 				self::STYLE_HANDLE,
-				BLOCK_WHEN_URL . 'build/index.css',
+				RENDERWHEN_URL . 'build/index.css',
 				array(),
-				BLOCK_WHEN_VERSION
+				RENDERWHEN_VERSION
 			);
 		}
 	}

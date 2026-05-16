@@ -1,15 +1,15 @@
 <?php
 /**
- * Tests for {@see Block_When\Conditions\Device_Condition}.
+ * Tests for {@see RenderWhen\Conditions\Device_Condition}.
  *
- * @package Block_When
+ * @package RenderWhen
  */
 
 declare( strict_types=1 );
 
-namespace Block_When\Tests\Conditions;
+namespace RenderWhen\Tests\Conditions;
 
-use Block_When\Conditions\Device_Condition;
+use RenderWhen\Conditions\Device_Condition;
 use ReflectionClass;
 use WP_UnitTestCase;
 
@@ -17,7 +17,7 @@ defined( 'ABSPATH' ) || exit;
 
 /**
  * Device-type condition: desktop / tablet / mobile classification,
- * per-request caching, and the `block_when_device_type` filter override.
+ * per-request caching, and the `renderwhen_device_type` filter override.
  */
 final class Test_Device_Condition extends WP_UnitTestCase {
 
@@ -46,7 +46,7 @@ final class Test_Device_Condition extends WP_UnitTestCase {
 	 */
 	public function tear_down(): void {
 		$this->reset_device_cache();
-		remove_all_filters( 'block_when_device_type' );
+		remove_all_filters( 'renderwhen_device_type' );
 		parent::tear_down();
 	}
 
@@ -199,7 +199,7 @@ final class Test_Device_Condition extends WP_UnitTestCase {
 	}
 
 	/**
-	 * The `block_when_device_type` filter overrides whatever UA detection
+	 * The `renderwhen_device_type` filter overrides whatever UA detection
 	 * produced — registering a callback that returns 'tablet' must let
 	 * a tablet-only block evaluate true.
 	 */
@@ -209,7 +209,7 @@ final class Test_Device_Condition extends WP_UnitTestCase {
 		$this->reset_device_cache();
 
 		add_filter(
-			'block_when_device_type',
+			'renderwhen_device_type',
 			static function (): string {
 				return 'tablet';
 			}
@@ -229,7 +229,7 @@ final class Test_Device_Condition extends WP_UnitTestCase {
 
 		$call_count = 0;
 		add_filter(
-			'block_when_device_type',
+			'renderwhen_device_type',
 			static function () use ( &$call_count ): string {
 				++$call_count;
 				return 'mobile';

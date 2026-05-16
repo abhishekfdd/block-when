@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<ruleset name="Block When">
-	<description>Coding standards for the Block When plugin.</description>
+<ruleset name="RenderWhen for Blocks">
+	<description>Coding standards for the RenderWhen for Blocks plugin.</description>
 
 	<file>.</file>
 
@@ -27,7 +27,7 @@
 	<rule ref="WordPress.WP.I18n">
 		<properties>
 			<property name="text_domain" type="array">
-				<element value="block-when"/>
+				<element value="renderwhen"/>
 			</property>
 		</properties>
 	</rule>
@@ -35,9 +35,9 @@
 	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
 		<properties>
 			<property name="prefixes" type="array">
-				<element value="block_when"/>
-				<element value="Block_When"/>
-				<element value="BLOCK_WHEN"/>
+				<element value="renderwhen"/>
+				<element value="RenderWhen"/>
+				<element value="RENDERWHEN"/>
 			</property>
 		</properties>
 	</rule>
@@ -45,6 +45,6 @@
 	<config name="testVersion" value="7.4-"/>
 	<rule ref="PHPCompatibilityWP"/>
 
-	<config name="text_domain" value="block-when"/>
+	<config name="text_domain" value="renderwhen"/>
 	<config name="minimum_supported_wp_version" value="6.5"/>
 </ruleset>

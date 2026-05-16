@@ -1,15 +1,15 @@
 <?php
 /**
- * Tests for {@see Block_When\Conditions\User_State_Condition}.
+ * Tests for {@see RenderWhen\Conditions\User_State_Condition}.
  *
- * @package Block_When
+ * @package RenderWhen
  */
 
 declare( strict_types=1 );
 
-namespace Block_When\Tests\Conditions;
+namespace RenderWhen\Tests\Conditions;
 
-use Block_When\Conditions\User_State_Condition;
+use RenderWhen\Conditions\User_State_Condition;
 use WP_UnitTestCase;
 
 defined( 'ABSPATH' ) || exit;

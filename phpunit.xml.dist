@@ -9,7 +9,7 @@
 	failOnRisky="true"
 >
 	<testsuites>
-		<testsuite name="block-when">
+		<testsuite name="renderwhen">
 			<directory prefix="test_" suffix=".php">tests/phpunit</directory>
 		</testsuite>
 	</testsuites>

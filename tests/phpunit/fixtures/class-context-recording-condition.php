@@ -6,14 +6,14 @@
  * through to `evaluate()` correctly — particularly the `post_id` key,
  * which must reflect the looped post and not the outer page's post.
  *
- * @package Block_When
+ * @package RenderWhen
  */
 
 declare( strict_types=1 );
 
-namespace Block_When\Tests\Fixtures;
+namespace RenderWhen\Tests\Fixtures;
 
-use Block_When\Conditions\Abstract_Condition;
+use RenderWhen\Conditions\Abstract_Condition;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -23,7 +23,7 @@ defined( 'ABSPATH' ) || exit;
 final class Context_Recording_Condition extends Abstract_Condition {
 
 	/**
-	 * Stable id used in test `blockWhen.conditionId` attributes.
+	 * Stable id used in test `renderWhen.conditionId` attributes.
 	 */
 	public const ID = 'fixture/context_recorder';
 

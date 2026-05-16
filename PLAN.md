@@ -1,4 +1,4 @@
-# Block When — Project Plan
+# RenderWhen for Blocks — Project Plan
 
 > This file is the source of truth for the plugin's scope, architecture, and
 > conventions. Claude Code (and any human contributor) should read this first
@@ -51,16 +51,16 @@ are themselves registered through that public API — we dogfood it.
 
 | Where                          | Value                          |
 | ------------------------------ | ------------------------------ |
-| Plugin slug                    | `block-when`                   |
-| Plugin display name            | `Block When`                   |
-| Text domain                    | `block-when`                   |
-| PHP namespace root             | `Block_When\`                  |
-| PHP function/filter prefix     | `block_when_`                  |
-| PHP constant prefix            | `BLOCK_WHEN_`                  |
-| Block attribute namespace      | `blockWhen/visibility`         |
-| Editor CSS class               | `has-block-when-rule`          |
-| JS package name (internal)     | `@block-when/editor`           |
-| Main repo / org                | `block-when`                   |
+| Plugin slug                    | `renderwhen`                   |
+| Plugin display name            | `RenderWhen for Blocks`        |
+| Text domain                    | `renderwhen`                   |
+| PHP namespace root             | `RenderWhen\`                  |
+| PHP function/filter prefix     | `renderwhen_`                  |
+| PHP constant prefix            | `RENDERWHEN_`                  |
+| Block attribute namespace      | `renderWhen/visibility`        |
+| Editor CSS class               | `has-renderwhen-rule`          |
+| JS package name (internal)     | `@renderwhen/editor`           |
+| Main repo / org                | `renderwhen`                   |
 
 ## Architecture
 
@@ -69,7 +69,7 @@ are themselves registered through that public API — we dogfood it.
 - **Server-side renderer** hooks `render_block` and decides whether to return
   the rendered HTML or an empty string.
 - **Attribute extender** hooks `register_block_type_args` to add a
-  `blockWhen` attribute schema to every registered block.
+  `renderWhen` attribute schema to every registered block.
 - **Conditions registry** is a singleton holding all registered conditions
   (built-in + third-party). Exposes a filter for extension.
 - **Editor UI** is a higher-order component on `editor.BlockEdit` that adds
@@ -82,29 +82,29 @@ PHP:
 
 ```php
 // Register a custom condition.
-add_action( 'block_when_register_conditions', function ( $registry ) {
+add_action( 'renderwhen_register_conditions', function ( $registry ) {
     $registry->register( new My_Custom_Condition() );
 } );
 
-// Conditions implement Block_When\Conditions\Interface_Condition.
+// Conditions implement RenderWhen\Conditions\Interface_Condition.
 ```
 
 Filters (part of the public contract — semver applies):
 
-- `block_when_register_conditions` — fires after built-ins are registered.
+- `renderwhen_register_conditions` — fires after built-ins are registered.
   Receives the `Conditions_Registry` instance.
-- `block_when_evaluate_{$condition_id}` — last-mile filter on a condition's
+- `renderwhen_evaluate_{$condition_id}` — last-mile filter on a condition's
   evaluation result. For overrides and testing.
-- `block_when_render_block_hidden` — fires when a block is hidden.
+- `renderwhen_render_block_hidden` — fires when a block is hidden.
   Receives `( $block, $matched_condition )`. For caching/SEO integrations.
-- `block_when_device_type` — filters detected device type. Allows swapping
+- `renderwhen_device_type` — filters detected device type. Allows swapping
   in a different detection library.
 
 ### File structure
 
 ```
-block-when/
-├── block-when.php                # Bootstrap only (~50 lines, no logic)
+renderwhen/
+├── renderwhen.php                # Bootstrap only (~50 lines, no logic)
 ├── readme.txt                    # WordPress.org format
 ├── README.md                     # GitHub-facing
 ├── LICENSE                       # GPL-2.0-or-later
@@ -163,7 +163,7 @@ block-when/
 - **JS:** `@wordpress/eslint-plugin/recommended`. Zero warnings.
 - **CSS:** `@wordpress/stylelint-config`.
 - **All user-facing strings:** internationalized with text domain
-  `block-when`. Use `wp.i18n` in JS, `__()` / `esc_html__()` in PHP.
+  `renderwhen`. Use `wp.i18n` in JS, `__()` / `esc_html__()` in PHP.
 - **All output:** late-escaped at the point of output.
 - **All input:** sanitized via the appropriate `sanitize_*` function for the
   data type, not blanket `sanitize_text_field`.
@@ -211,7 +211,7 @@ wp-env clean all        # Reset on schema changes
   there too.
 - Date range that crosses a DST boundary. Use `wp_date()` and site timezone.
 - Device detection cached per-request — must not vary by call site.
-- Empty / malformed `blockWhen` attribute. Treat as "always visible."
+- Empty / malformed `renderWhen` attribute. Treat as "always visible."
 - Third-party block with its own `render_callback`. Our filter runs after.
 
 ## Release plan
@@ -224,8 +224,8 @@ wp-env clean all        # Reset on schema changes
 
 ## Submission checklist
 
-- [x] Slug `block-when` confirmed available at
-      `https://wordpress.org/plugins/block-when/` (404 response)
+- [x] Slug `renderwhen` confirmed available at
+      `https://wordpress.org/plugins/renderwhen/` (404 response)
 - [ ] `readme.txt` validated at the WordPress.org readme validator
 - [ ] All PHPCS warnings resolved (VIP-Go ruleset)
 - [ ] All ESLint warnings resolved

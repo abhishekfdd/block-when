@@ -1,20 +1,20 @@
 <?php
 /**
- * Tests for {@see Block_When\Block_Renderer}.
+ * Tests for {@see RenderWhen\Block_Renderer}.
  *
- * @package Block_When
+ * @package RenderWhen
  */
 
 declare( strict_types=1 );
 
-namespace Block_When\Tests;
+namespace RenderWhen\Tests;
 
-use Block_When\Block_Renderer;
-use Block_When\Conditions_Registry;
-use Block_When\Tests\Fixtures\Always_False_Condition;
-use Block_When\Tests\Fixtures\Always_True_Condition;
-use Block_When\Tests\Fixtures\Context_Recording_Condition;
-use Block_When\Tests\Fixtures\Throwing_Condition;
+use RenderWhen\Block_Renderer;
+use RenderWhen\Conditions_Registry;
+use RenderWhen\Tests\Fixtures\Always_False_Condition;
+use RenderWhen\Tests\Fixtures\Always_True_Condition;
+use RenderWhen\Tests\Fixtures\Context_Recording_Condition;
+use RenderWhen\Tests\Fixtures\Throwing_Condition;
 use ReflectionClass;
 use WP_Block;
 use WP_UnitTestCase;
@@ -23,7 +23,7 @@ defined( 'ABSPATH' ) || exit;
 
 /**
  * Renderer behaviour: hidden blocks return empty string, visible blocks
- * pass through, malformed `blockWhen` attribute is treated as visible,
+ * pass through, malformed `renderWhen` attribute is treated as visible,
  * Query Loop context is honoured, exceptions degrade gracefully.
  */
 final class Test_Block_Renderer extends WP_UnitTestCase {
@@ -36,7 +36,7 @@ final class Test_Block_Renderer extends WP_UnitTestCase {
 	 * which is exactly what the renderer reads when building the
 	 * `$context` it passes to `evaluate()`.
 	 */
-	private const CONTEXTUAL_BLOCK = 'block-when-test/contextual';
+	private const CONTEXTUAL_BLOCK = 'renderwhen-test/contextual';
 
 	/**
 	 * Renderer under test.
@@ -84,20 +84,20 @@ final class Test_Block_Renderer extends WP_UnitTestCase {
 	public function tear_down(): void {
 		unregister_block_type( self::CONTEXTUAL_BLOCK );
 		remove_all_filters( 'render_block' );
-		remove_all_actions( 'block_when_render_block_hidden' );
+		remove_all_actions( 'renderwhen_render_block_hidden' );
 		parent::tear_down();
 	}
 
 	/**
-	 * Build a parsed-block array carrying a `blockWhen` attribute.
+	 * Build a parsed-block array carrying a `renderWhen` attribute.
 	 *
-	 * @param array<string, mixed>|null $block_when Value for `attrs.blockWhen` (null = omit).
+	 * @param array<string, mixed>|null $render_when Value for `attrs.renderWhen` (null = omit).
 	 * @return array<string, mixed>
 	 */
-	private function block_with_rule( ?array $block_when ): array {
+	private function block_with_rule( ?array $render_when ): array {
 		$attrs = array();
-		if ( null !== $block_when ) {
-			$attrs['blockWhen'] = $block_when;
+		if ( null !== $render_when ) {
+			$attrs['renderWhen'] = $render_when;
 		}
 
 		return array(
@@ -122,7 +122,7 @@ final class Test_Block_Renderer extends WP_UnitTestCase {
 	}
 
 	/**
-	 * No `blockWhen` attribute at all → block renders unchanged.
+	 * No `renderWhen` attribute at all → block renders unchanged.
 	 */
 	public function test_block_without_attribute_renders_normally(): void {
 		$result = $this->renderer->filter_render_block(
@@ -134,9 +134,9 @@ final class Test_Block_Renderer extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Empty `blockWhen` object → block renders unchanged.
+	 * Empty `renderWhen` object → block renders unchanged.
 	 */
-	public function test_empty_blockwhen_renders_normally(): void {
+	public function test_empty_renderwhen_renders_normally(): void {
 		$result = $this->renderer->filter_render_block(
 			'<p>hello</p>',
 			$this->block_with_rule( array() )
@@ -213,7 +213,7 @@ final class Test_Block_Renderer extends WP_UnitTestCase {
 	}
 
 	/**
-	 * `block_when_render_block_hidden` fires with the block array and the
+	 * `renderwhen_render_block_hidden` fires with the block array and the
 	 * matched condition object when a block is suppressed.
 	 */
 	public function test_hidden_action_fires_with_block_and_condition(): void {
@@ -224,7 +224,7 @@ final class Test_Block_Renderer extends WP_UnitTestCase {
 		$received_condition = null;
 
 		add_action(
-			'block_when_render_block_hidden',
+			'renderwhen_render_block_hidden',
 			static function ( $block, $matched ) use ( &$received_block, &$received_condition ): void {
 				$received_block     = $block;
 				$received_condition = $matched;
@@ -254,7 +254,7 @@ final class Test_Block_Renderer extends WP_UnitTestCase {
 
 		$call_count = 0;
 		add_action(
-			'block_when_render_block_hidden',
+			'renderwhen_render_block_hidden',
 			static function () use ( &$call_count ): void {
 				++$call_count;
 			}
@@ -344,7 +344,7 @@ final class Test_Block_Renderer extends WP_UnitTestCase {
 	 * fires under `WP_DEBUG`.
 	 */
 	public function test_exception_during_evaluate_is_swallowed_and_block_renders(): void {
-		$this->setExpectedIncorrectUsage( 'Block_When\Block_Renderer::filter_render_block' );
+		$this->setExpectedIncorrectUsage( 'RenderWhen\Block_Renderer::filter_render_block' );
 
 		$this->registry->register( new Throwing_Condition() );
 
@@ -362,14 +362,14 @@ final class Test_Block_Renderer extends WP_UnitTestCase {
 	}
 
 	/**
-	 * The `block_when_evaluate_{$id}` filter can flip a true result to
+	 * The `renderwhen_evaluate_{$id}` filter can flip a true result to
 	 * false, suppressing the block.
 	 */
 	public function test_evaluate_filter_can_flip_result_to_false(): void {
 		$this->registry->register( new Always_True_Condition() );
 
 		add_filter(
-			'block_when_evaluate_' . Always_True_Condition::ID,
+			'renderwhen_evaluate_' . Always_True_Condition::ID,
 			static function (): bool {
 				return false;
 			}
@@ -385,7 +385,7 @@ final class Test_Block_Renderer extends WP_UnitTestCase {
 			)
 		);
 
-		remove_all_filters( 'block_when_evaluate_' . Always_True_Condition::ID );
+		remove_all_filters( 'renderwhen_evaluate_' . Always_True_Condition::ID );
 
 		$this->assertSame( '', $result );
 	}

@@ -1,16 +1,16 @@
 /**
- * Block When — editor indicator.
+ * RenderWhen — editor indicator.
  *
- * Filters `editor.BlockListBlock` to add the `has-block-when-rule` class
+ * Filters `editor.BlockListBlock` to add the `has-renderwhen-rule` class
  * to any block that has an active visibility rule, so the editor can
  * show a subtle indicator without affecting front-end output.
  *
  * "Active" here means three things, all required:
- *   - `blockWhen` attribute is truthy
- *   - `blockWhen.conditionId` is a non-empty string
+ *   - `renderWhen` attribute is truthy
+ *   - `renderWhen.conditionId` is a non-empty string
  *   - that id resolves to a registered condition module
  *
- * The third check matters: a block may carry a `blockWhen` for a
+ * The third check matters: a block may carry a `renderWhen` for a
  * condition that lived in a now-deactivated plugin, and we don't want
  * to visually flag rules the renderer can't actually evaluate.
  *
@@ -26,7 +26,7 @@ import { getCondition } from './store/conditions-registry';
  * CSS class added to flagged blocks. Locked in PLAN.md naming
  * conventions — keep in sync if either ever changes.
  */
-const RULE_CLASS = 'has-block-when-rule';
+const RULE_CLASS = 'has-renderwhen-rule';
 
 /**
  * Decide whether a block carries an evaluable visibility rule.
@@ -37,11 +37,11 @@ const RULE_CLASS = 'has-block-when-rule';
  * @return {boolean} True when the block has an active, registered rule.
  */
 export function hasActiveRule( attributes ) {
-	const blockWhen = attributes && attributes.blockWhen;
-	if ( ! blockWhen ) {
+	const renderWhen = attributes && attributes.renderWhen;
+	if ( ! renderWhen ) {
 		return false;
 	}
-	const conditionId = blockWhen.conditionId;
+	const conditionId = renderWhen.conditionId;
 	if ( typeof conditionId !== 'string' || conditionId === '' ) {
 		return false;
 	}
@@ -49,7 +49,7 @@ export function hasActiveRule( attributes ) {
 }
 
 /**
- * HOC that adds `has-block-when-rule` to a flagged block's wrapper.
+ * HOC that adds `has-renderwhen-rule` to a flagged block's wrapper.
  *
  * Exported for the unit test. The runtime wiring happens via the
  * `addFilter` call below — importing this module is enough to register
@@ -70,6 +70,6 @@ export const withRuleIndicator = createHigherOrderComponent(
 
 addFilter(
 	'editor.BlockListBlock',
-	'block-when/with-rule-indicator',
+	'renderwhen/with-rule-indicator',
 	withRuleIndicator
 );

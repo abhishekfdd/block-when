@@ -53,8 +53,8 @@ describe( 'preview-mode store', () => {
 	};
 
 	it( 'registers under the documented store name', () => {
-		expect( registered.name ).toBe( 'block-when/preview-mode' );
-		expect( store.STORE_NAME ).toBe( 'block-when/preview-mode' );
+		expect( registered.name ).toBe( 'renderwhen/preview-mode' );
+		expect( store.STORE_NAME ).toBe( 'renderwhen/preview-mode' );
 	} );
 
 	it( 'exposes the expected default state', () => {

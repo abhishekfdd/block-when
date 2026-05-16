@@ -1,5 +1,5 @@
 /**
- * Block When — editor-only styles.
+ * RenderWhen — editor-only styles.
  *
  * Loaded by Editor_Assets on `enqueue_block_editor_assets`. Front-end
  * pages never see this stylesheet — hidden blocks are removed at render
@@ -20,7 +20,7 @@
 	padding-left: 0.5em;
 }
 
-.editor-styles-wrapper .block-editor-block-list__block.has-block-when-rule {
+.editor-styles-wrapper .block-editor-block-list__block.has-renderwhen-rule {
 	/* `--wp-admin-theme-color` is exposed by WP 5.7+; the literal fallback
 	 * keeps the indicator visible on older cores or in iframes that
 	 * haven't inherited the variable. */
@@ -33,17 +33,17 @@
  * simulated audience fade to 30% and pick up a small badge in the top-
  * right corner. The block stays in the DOM (and stays selectable) so
  * the user can edit it without leaving preview mode. The badge label
- * comes from the `--block-when-preview-label` custom property, which
+ * comes from the `--renderwhen-preview-label` custom property, which
  * `preview-renderer.js` sets at module load via wp.i18n — keeping the
  * translation pipeline in JS while letting CSS own the presentation.
  */
-.editor-styles-wrapper .block-editor-block-list__block.block-when-preview-hidden {
+.editor-styles-wrapper .block-editor-block-list__block.renderwhen-preview-hidden {
 	opacity: 0.3;
 	position: relative;
 }
 
-.editor-styles-wrapper .block-editor-block-list__block.block-when-preview-hidden::after {
-	content: var(--block-when-preview-label, "Hidden in preview");
+.editor-styles-wrapper .block-editor-block-list__block.renderwhen-preview-hidden::after {
+	content: var(--renderwhen-preview-label, "Hidden in preview");
 	position: absolute;
 	top: 0.25em;
 	right: 0.25em;

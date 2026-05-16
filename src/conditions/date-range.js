@@ -1,5 +1,5 @@
 /**
- * Block When — date-range condition (editor).
+ * RenderWhen — date-range condition (editor).
  *
  * Editor-side counterpart of `Date_Range_Condition`. Provides two
  * optional bounds (start, end) via a CheckboxControl + DateTimePicker
@@ -60,7 +60,7 @@ function isoToDb( iso ) {
  * "right now" is the most common starting point and saves a click.
  * Local-time is correct here: the editor displays local wall-clock,
  * the PHP evaluator interprets the same wall-clock in site timezone,
- * and Block When deliberately treats both as the same configured
+ * and RenderWhen deliberately treats both as the same configured
  * moment (see Date_Range_Condition's class docblock).
  *
  * @return {string} Y-m-d H:i:s.
@@ -114,7 +114,7 @@ export function DateRangeSettings( { settings, onChange } ) {
 	return (
 		<>
 			<CheckboxControl
-				label={ __( 'Has start date', 'block-when' ) }
+				label={ __( 'Has start date', 'renderwhen' ) }
 				checked={ start !== null }
 				onChange={ toggleStart }
 				__nextHasNoMarginBottom
@@ -126,7 +126,7 @@ export function DateRangeSettings( { settings, onChange } ) {
 				/>
 			) }
 			<CheckboxControl
-				label={ __( 'Has end date', 'block-when' ) }
+				label={ __( 'Has end date', 'renderwhen' ) }
 				checked={ end !== null }
 				onChange={ toggleEnd }
 				__nextHasNoMarginBottom
@@ -218,7 +218,7 @@ export function evaluate( settings, previewContext ) {
 
 registerCondition( {
 	id: 'date_range',
-	label: __( 'Date range', 'block-when' ),
+	label: __( 'Date range', 'renderwhen' ),
 	SettingsComponent: DateRangeSettings,
 	defaultSettings: () => ( { start: null, end: null } ),
 	evaluate,

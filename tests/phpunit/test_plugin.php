@@ -1,22 +1,22 @@
 <?php
 /**
- * Tests for {@see Block_When\Plugin}.
+ * Tests for {@see RenderWhen\Plugin}.
  *
  * Scope is intentionally narrow: this class only verifies orchestration
  * and dogfooding of the public registration action. The detail behaviour
  * of each wired component is covered by its own dedicated test class.
  *
- * @package Block_When
+ * @package RenderWhen
  */
 
 declare( strict_types=1 );
 
-namespace Block_When\Tests;
+namespace RenderWhen\Tests;
 
-use Block_When\Conditions\Abstract_Condition;
-use Block_When\Conditions\Interface_Condition;
-use Block_When\Conditions_Registry;
-use Block_When\Plugin;
+use RenderWhen\Conditions\Abstract_Condition;
+use RenderWhen\Conditions\Interface_Condition;
+use RenderWhen\Conditions_Registry;
+use RenderWhen\Plugin;
 use ReflectionClass;
 use WP_UnitTestCase;
 
@@ -30,7 +30,7 @@ final class Test_Plugin extends WP_UnitTestCase {
 
 	/**
 	 * Reset both the Plugin and Conditions_Registry singletons and clear
-	 * any callbacks on `block_when_register_conditions` before each case.
+	 * any callbacks on `renderwhen_register_conditions` before each case.
 	 *
 	 * The plugin bootstrap fires `init()` once on `plugins_loaded`, so by
 	 * the time a test runs both singletons already hold post-init state
@@ -45,7 +45,7 @@ final class Test_Plugin extends WP_UnitTestCase {
 		$this->reset_plugin_singleton();
 		$this->reset_registry_singleton();
 
-		remove_all_actions( 'block_when_register_conditions' );
+		remove_all_actions( 'renderwhen_register_conditions' );
 	}
 
 	/**
@@ -55,7 +55,7 @@ final class Test_Plugin extends WP_UnitTestCase {
 	 * @return void
 	 */
 	public function tear_down(): void {
-		remove_all_actions( 'block_when_register_conditions' );
+		remove_all_actions( 'renderwhen_register_conditions' );
 		parent::tear_down();
 	}
 
@@ -198,16 +198,16 @@ final class Test_Plugin extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Third-party callbacks on `block_when_register_conditions` receive
+	 * Third-party callbacks on `renderwhen_register_conditions` receive
 	 * the live registry and may register conditions that survive boot —
 	 * the same path the built-ins themselves go through.
 	 */
-	public function test_block_when_register_conditions_action_fires(): void {
+	public function test_renderwhen_register_conditions_action_fires(): void {
 		$received = null;
 		$custom   = $this->make_stub_condition( 'custom-from-test' );
 
 		add_action(
-			'block_when_register_conditions',
+			'renderwhen_register_conditions',
 			static function ( $registry ) use ( &$received, $custom ): void {
 				$received = $registry;
 				$registry->register( $custom );

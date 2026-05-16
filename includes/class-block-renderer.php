@@ -2,18 +2,18 @@
 /**
  * Server-side block visibility renderer.
  *
- * Hooks into `render_block` and decides — based on the block's `blockWhen`
+ * Hooks into `render_block` and decides — based on the block's `renderWhen`
  * attribute — whether to return the rendered HTML or an empty string.
  * Hidden blocks are never sent to the browser.
  *
- * @package Block_When
+ * @package RenderWhen
  */
 
 declare( strict_types=1 );
 
-namespace Block_When;
+namespace RenderWhen;
 
-use Block_When\Conditions\Interface_Condition;
+use RenderWhen\Conditions\Interface_Condition;
 use Throwable;
 
 defined( 'ABSPATH' ) || exit;
@@ -56,18 +56,18 @@ final class Block_Renderer {
 	 * Filter callback for `render_block`.
 	 *
 	 * Decision tree, in order:
-	 *   1. No `blockWhen` attribute, or empty object         → render as-is.
+	 *   1. No `renderWhen` attribute, or empty object        → render as-is.
 	 *   2. Missing / non-string / empty `conditionId`        → render as-is.
 	 *   3. `conditionId` not in the registry                 → render as-is.
 	 *   4. Condition's `evaluate()` throws                   → render as-is
 	 *      (and `_doing_it_wrong()` when `WP_DEBUG` is on).
-	 *   5. Result, after the `block_when_evaluate_{$id}`
+	 *   5. Result, after the `renderwhen_evaluate_{$id}`
 	 *      filter, is falsy                                  → return ''.
 	 *   6. Otherwise                                          → render as-is.
 	 *
 	 * Cases 1–3 are "graceful degradation": malformed or stale rules never
 	 * silently pull a block off the page. Case 5 is the only path that
-	 * suppresses output, and it fires `block_when_render_block_hidden`
+	 * suppresses output, and it fires `renderwhen_render_block_hidden`
 	 * before returning so caching / SEO integrations can react.
 	 *
 	 * @param string                 $block_content Rendered block HTML.
@@ -76,16 +76,16 @@ final class Block_Renderer {
 	 * @return string Filtered block content (empty string when hidden).
 	 */
 	public function filter_render_block( string $block_content, array $block, ?\WP_Block $instance = null ): string {
-		$attrs      = isset( $block['attrs'] ) && is_array( $block['attrs'] ) ? $block['attrs'] : array();
-		$block_when = $attrs['blockWhen'] ?? null;
+		$attrs       = isset( $block['attrs'] ) && is_array( $block['attrs'] ) ? $block['attrs'] : array();
+		$render_when = $attrs['renderWhen'] ?? null;
 
 		// Case 1: no rule == always visible.
-		if ( ! is_array( $block_when ) || array() === $block_when ) {
+		if ( ! is_array( $render_when ) || array() === $render_when ) {
 			return $block_content;
 		}
 
 		// Case 2: malformed rule == always visible.
-		$condition_id = $block_when['conditionId'] ?? '';
+		$condition_id = $render_when['conditionId'] ?? '';
 		if ( ! is_string( $condition_id ) || '' === $condition_id ) {
 			return $block_content;
 		}
@@ -96,7 +96,7 @@ final class Block_Renderer {
 			return $block_content;
 		}
 
-		$settings = $block_when['settings'] ?? array();
+		$settings = $render_when['settings'] ?? array();
 		if ( ! is_array( $settings ) ) {
 			$settings = array();
 		}
@@ -124,14 +124,14 @@ final class Block_Renderer {
 		 * @param array<string, mixed>  $settings Per-block condition settings.
 		 * @param array<string, mixed>  $context  Render-time context.
 		 */
-		$result = (bool) apply_filters( "block_when_evaluate_{$condition_id}", $result, $settings, $context );
+		$result = (bool) apply_filters( "renderwhen_evaluate_{$condition_id}", $result, $settings, $context );
 
 		if ( $result ) {
 			return $block_content;
 		}
 
 		/**
-		 * Fires immediately before a block is suppressed by Block When.
+		 * Fires immediately before a block is suppressed by RenderWhen.
 		 *
 		 * Public extension point for caching layers (so they can vary the
 		 * cache key by the condition that hid the block) and SEO plugins
@@ -142,7 +142,7 @@ final class Block_Renderer {
 		 * @param array<string, mixed> $block             Parsed block array.
 		 * @param Interface_Condition  $matched_condition Condition that hid the block.
 		 */
-		do_action( 'block_when_render_block_hidden', $block, $condition );
+		do_action( 'renderwhen_render_block_hidden', $block, $condition );
 
 		return '';
 	}
@@ -199,11 +199,11 @@ final class Block_Renderer {
 			__CLASS__ . '::filter_render_block',
 			sprintf(
 				/* translators: 1: condition id, 2: exception message. */
-				esc_html__( 'Block When condition "%1$s" threw during evaluation: %2$s. Block was rendered as if no rule were set.', 'block-when' ),
+				esc_html__( 'RenderWhen condition "%1$s" threw during evaluation: %2$s. Block was rendered as if no rule were set.', 'renderwhen' ),
 				esc_html( $condition_id ),
 				esc_html( $error->getMessage() )
 			),
-			'Block When 1.0.0'
+			'RenderWhen 1.0.0'
 		);
 	}
 }

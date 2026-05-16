@@ -6,16 +6,16 @@
  * and block renderer together on `plugins_loaded`. Reviewers and
  * contributors looking for behaviour should start here.
  *
- * @package Block_When
+ * @package RenderWhen
  */
 
 declare( strict_types=1 );
 
-namespace Block_When;
+namespace RenderWhen;
 
-use Block_When\Conditions\Date_Range_Condition;
-use Block_When\Conditions\Device_Condition;
-use Block_When\Conditions\User_State_Condition;
+use RenderWhen\Conditions\Date_Range_Condition;
+use RenderWhen\Conditions\Device_Condition;
+use RenderWhen\Conditions\User_State_Condition;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -25,7 +25,7 @@ defined( 'ABSPATH' ) || exit;
  * The registry is intentionally not stored on this singleton and not
  * exposed via an accessor — the renderer that needs it receives it by
  * constructor injection, and third-party code reaches the registry via
- * the public `block_when_register_conditions` action argument.
+ * the public `renderwhen_register_conditions` action argument.
  */
 final class Plugin {
 
@@ -83,7 +83,7 @@ final class Plugin {
 	 *
 	 * Order:
 	 *   1. Resolve the conditions registry.
-	 *   2. Hook our own callback into `block_when_register_conditions`
+	 *   2. Hook our own callback into `renderwhen_register_conditions`
 	 *      that registers the three built-in conditions, then bootstrap
 	 *      the registry — built-ins go through the same public action
 	 *      third parties use, which proves the path works.
@@ -102,7 +102,7 @@ final class Plugin {
 		$registry = Conditions_Registry::instance();
 
 		add_action(
-			'block_when_register_conditions',
+			'renderwhen_register_conditions',
 			static function ( Conditions_Registry $registering_into ): void {
 				$registering_into->register( new User_State_Condition() );
 				$registering_into->register( new Date_Range_Condition() );

@@ -1,5 +1,5 @@
 /**
- * Block When — editor entry point.
+ * RenderWhen — editor entry point.
  *
  * Registers the higher-order component on `editor.BlockEdit` that adds a
  * "Visibility" panel to every block's InspectorControls. The panel lets
@@ -43,17 +43,17 @@ import './editor.scss';
 
 /**
  * Sentinel value for the "no rule" option in the condition-type
- * dropdown. Never persisted — selecting it sets `blockWhen` to `null`.
+ * dropdown. Never persisted — selecting it sets `renderWhen` to `null`.
  */
 const ALWAYS = '';
 
 const VisibilityPanel = ( { attributes, setAttributes } ) => {
-	const blockWhen = attributes.blockWhen || null;
-	const conditionId = blockWhen ? blockWhen.conditionId : ALWAYS;
+	const renderWhen = attributes.renderWhen || null;
+	const conditionId = renderWhen ? renderWhen.conditionId : ALWAYS;
 	const condition = conditionId ? getCondition( conditionId ) : undefined;
 
 	const options = [
-		{ value: ALWAYS, label: __( 'Always', 'block-when' ) },
+		{ value: ALWAYS, label: __( 'Always', 'renderwhen' ) },
 		...getAllConditions().map( ( c ) => ( {
 			value: c.id,
 			label: c.label,
@@ -62,7 +62,7 @@ const VisibilityPanel = ( { attributes, setAttributes } ) => {
 
 	const handleConditionChange = ( newId ) => {
 		if ( ! newId ) {
-			setAttributes( { blockWhen: null } );
+			setAttributes( { renderWhen: null } );
 			return;
 		}
 		const next = getCondition( newId );
@@ -70,7 +70,7 @@ const VisibilityPanel = ( { attributes, setAttributes } ) => {
 			return;
 		}
 		setAttributes( {
-			blockWhen: {
+			renderWhen: {
 				conditionId: newId,
 				settings: next.defaultSettings(),
 			},
@@ -79,8 +79,8 @@ const VisibilityPanel = ( { attributes, setAttributes } ) => {
 
 	const handleSettingsChange = ( newSettings ) => {
 		setAttributes( {
-			blockWhen: {
-				...blockWhen,
+			renderWhen: {
+				...renderWhen,
 				settings: newSettings,
 			},
 		} );
@@ -91,11 +91,11 @@ const VisibilityPanel = ( { attributes, setAttributes } ) => {
 	return (
 		<InspectorControls>
 			<PanelBody
-				title={ __( 'Visibility', 'block-when' ) }
+				title={ __( 'Visibility', 'renderwhen' ) }
 				initialOpen={ false }
 			>
 				<SelectControl
-					label={ __( 'Show this block when…', 'block-when' ) }
+					label={ __( 'Show this block when…', 'renderwhen' ) }
 					value={ conditionId }
 					options={ options }
 					onChange={ handleConditionChange }
@@ -104,7 +104,9 @@ const VisibilityPanel = ( { attributes, setAttributes } ) => {
 				/>
 				{ SettingsComponent && (
 					<SettingsComponent
-						settings={ blockWhen ? blockWhen.settings : undefined }
+						settings={
+							renderWhen ? renderWhen.settings : undefined
+						}
 						onChange={ handleSettingsChange }
 					/>
 				) }
@@ -128,6 +130,6 @@ const withVisibilityControls = createHigherOrderComponent(
 
 addFilter(
 	'editor.BlockEdit',
-	'block-when/with-visibility-controls',
+	'renderwhen/with-visibility-controls',
 	withVisibilityControls
 );

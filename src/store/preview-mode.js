@@ -1,5 +1,5 @@
 /**
- * Block When — preview-mode store.
+ * RenderWhen — preview-mode store.
  *
  * Holds the editor-side "Preview as audience" state: whether the
  * simulation is active and, when it is, the audience the editor is
@@ -22,7 +22,7 @@ import { registerStore } from '@wordpress/data';
  * Store key. Exported for consumers (sidebar + BlockListBlock filter)
  * so the string is defined exactly once.
  */
-export const STORE_NAME = 'block-when/preview-mode';
+export const STORE_NAME = 'renderwhen/preview-mode';
 
 /**
  * Initial state. The audience defaults model "the most common content
@@ -39,8 +39,8 @@ const DEFAULT_STATE = {
 	},
 };
 
-const SET_ACTIVE = 'BLOCK_WHEN_PREVIEW/SET_ACTIVE';
-const SET_AUDIENCE = 'BLOCK_WHEN_PREVIEW/SET_AUDIENCE';
+const SET_ACTIVE = 'RENDERWHEN_PREVIEW/SET_ACTIVE';
+const SET_AUDIENCE = 'RENDERWHEN_PREVIEW/SET_AUDIENCE';
 
 const actions = {
 	/**

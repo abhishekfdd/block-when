@@ -1,7 +1,7 @@
 {
-	"name": "block-when",
+	"name": "renderwhen",
 	"version": "1.0.0",
-	"description": "Editor JS for the Block When WordPress plugin.",
+	"description": "Editor JS for the RenderWhen for Blocks WordPress plugin.",
 	"private": true,
 	"license": "GPL-2.0-or-later",
 	"author": "Abhishek",

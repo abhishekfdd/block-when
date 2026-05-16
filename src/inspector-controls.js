@@ -1,9 +1,9 @@
 /**
- * Block When — InspectorControls panel.
+ * RenderWhen — InspectorControls panel.
  *
  * Renders the "Visibility" panel inside the block inspector, lets the
  * editor pick a condition, and dispatches updates to the block's
- * `blockWhen` attribute.
+ * `renderWhen` attribute.
  *
- * @package Block_When
+ * @package RenderWhen
  */

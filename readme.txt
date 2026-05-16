@@ -1,4 +1,4 @@
-=== Block When ===
+=== RenderWhen for Blocks ===
 Contributors:      abhishekfdd
 Tags:              block editor, gutenberg, visibility, conditional, blocks
 Requires at least: 6.5
@@ -12,13 +12,13 @@ Show or hide any block when conditions match. Developer-first API and true serve
 
 == Description ==
 
-Block When adds conditional visibility to every block in the WordPress block editor. Decide who sees what, and when, with a panel that reads exactly how you'd say it out loud:
+RenderWhen for Blocks adds conditional visibility to every block in the WordPress block editor. Decide who sees what, and when, with a panel that reads exactly how you'd say it out loud:
 
 > *Show this block when the user is logged in.*
 > *Show this block when the date is between March 1 and March 31.*
 > *Show this block when the device is mobile.*
 
-It is built around two ideas that set it apart from other visibility plugins:
+RenderWhen is built around two ideas that set it apart from other visibility plugins:
 
 * **Server-side rendering only.** When a block is hidden by a condition, it is not rendered into the page output at all. No CSS `display: none`, no DOM bloat, no leaked content in view-source. Search engines, screen readers, and your page weight all benefit.
 * **Public Conditions API.** The three built-in conditions are registered through the same public API your plugin or theme can use to add your own. No hacks, no internal-only code paths.
@@ -53,17 +53,17 @@ If you need those today, [Conditional Blocks](https://wordpress.org/plugins/cond
 Register a custom condition in three steps. Implement the interface, add it to the registry, ship.
 
 `
-add_action( 'block_when_register_conditions', function ( $registry ) {
+add_action( 'renderwhen_register_conditions', function ( $registry ) {
     $registry->register( new My_Plugin\\Conditions\\Country_Condition() );
 } );
 `
 
-Your condition class implements `Block_When\Conditions\Interface_Condition`:
+Your condition class implements `RenderWhen\Conditions\Interface_Condition`:
 
 `
 namespace My_Plugin\Conditions;
 
-use Block_When\Conditions\Interface_Condition;
+use RenderWhen\Conditions\Interface_Condition;
 
 class Country_Condition implements Interface_Condition {
     public function get_id(): string {
@@ -95,16 +95,16 @@ class Country_Condition implements Interface_Condition {
 
 The full set of public filters:
 
-* `block_when_register_conditions` — register your conditions here
-* `block_when_evaluate_{condition_id}` — last-mile override of any condition's result
-* `block_when_render_block_hidden` — fires when a block is hidden, useful for cache busters and SEO tools
-* `block_when_device_type` — swap in your own device detection
+* `renderwhen_register_conditions` — register your conditions here
+* `renderwhen_evaluate_{condition_id}` — last-mile override of any condition's result
+* `renderwhen_render_block_hidden` — fires when a block is hidden, useful for cache busters and SEO tools
+* `renderwhen_device_type` — swap in your own device detection
 
-The plugin is developed openly on GitHub. Issues, PRs, and architecture discussions welcome: https://github.com/abhishekfdd/block-when
+The plugin is developed openly on GitHub. Issues, PRs, and architecture discussions welcome: https://github.com/abhishekfdd/renderwhen
 
 == Installation ==
 
-1. Upload the `block-when` folder to `/wp-content/plugins/`, or install through the **Plugins → Add New** screen
+1. Upload the `renderwhen` folder to `/wp-content/plugins/`, or install through the **Plugins → Add New** screen
 2. Activate the plugin
 3. Edit any post or page, select a block, and find the **Visibility** panel in the block inspector
 
@@ -134,19 +134,19 @@ The dashed left border indicates a block has a visibility rule attached. It's ed
 
 = Why do role-restricted blocks appear hidden when I preview as "Any role"? =
 
-Block When's preview can't know which roles an arbitrary visitor would have. When you preview as "Any role," role-restricted blocks appear hidden because the safest assumption is that an unknown visitor doesn't have the required role. To verify a role-restricted block actually shows for that role, pick the specific role from the preview dropdown.
+The preview can't know which roles an arbitrary visitor would have. When you preview as "Any role," role-restricted blocks appear hidden because the safest assumption is that an unknown visitor doesn't have the required role. To verify a role-restricted block actually shows for that role, pick the specific role from the preview dropdown.
 
 = How does this compare to Block Visibility or Conditional Blocks? =
 
-Both are excellent, mature plugins with broader feature sets. Block When is intentionally smaller in surface area, server-side-only in rendering, and built around a public extension API. If you need ACF/WooCommerce/cookie conditions today, use one of those. If you want a small, fast, extensible foundation, this is for you.
+Both are excellent, mature plugins with broader feature sets. RenderWhen is intentionally smaller in surface area, server-side-only in rendering, and built around a public extension API. If you need ACF/WooCommerce/cookie conditions today, use one of those. If you want a small, fast, extensible foundation, this is for you.
 
 = How does device detection work? =
 
-By default, via `wp_is_mobile()` plus a user-agent check for tablets. The result is filterable via `block_when_device_type` so you can plug in a more sophisticated library.
+By default, via `wp_is_mobile()` plus a user-agent check for tablets. The result is filterable via `renderwhen_device_type` so you can plug in a more sophisticated library.
 
 = Is this caching-friendly? =
 
-Mostly yes — visibility is evaluated at render time, so server-side page caches will cache whatever was rendered for that request. For varying-by-user content (login state, role), you'll want a cache layer that varies on cookies. The `block_when_render_block_hidden` action is provided so cache plugins and edge integrations can hook in.
+Mostly yes — visibility is evaluated at render time, so server-side page caches will cache whatever was rendered for that request. For varying-by-user content (login state, role), you'll want a cache layer that varies on cookies. The `renderwhen_render_block_hidden` action is provided so cache plugins and edge integrations can hook in.
 
 == Screenshots ==
 

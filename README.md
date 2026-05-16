@@ -1,23 +1,23 @@
-# Block When
+# RenderWhen for Blocks
 
 > Show or hide any block when conditions match. Developer-first API and true
 > server-side rendering — hidden blocks never reach the browser.
 
-[![Lint](https://github.com/abhishekfdd/block-when/actions/workflows/lint.yml/badge.svg)](https://github.com/abhishekfdd/block-when/actions/workflows/lint.yml)
-[![Tests](https://github.com/abhishekfdd/block-when/actions/workflows/test.yml/badge.svg)](https://github.com/abhishekfdd/block-when/actions/workflows/test.yml)
+[![Lint](https://github.com/abhishekfdd/renderwhen/actions/workflows/lint.yml/badge.svg)](https://github.com/abhishekfdd/renderwhen/actions/workflows/lint.yml)
+[![Tests](https://github.com/abhishekfdd/renderwhen/actions/workflows/test.yml/badge.svg)](https://github.com/abhishekfdd/renderwhen/actions/workflows/test.yml)
 [![License: GPL-2.0-or-later](https://img.shields.io/badge/license-GPL--2.0--or--later-blue.svg)](LICENSE)
 
-Block When adds conditional visibility to every block in the WordPress block
-editor. v1.0 ships three built-in conditions — user state, date range, and
-device type — registered through a public API your plugin or theme can use
-to add your own.
+RenderWhen for Blocks adds conditional visibility to every block in the
+WordPress block editor. v1.0 ships three built-in conditions — user state,
+date range, and device type — registered through a public API your plugin
+or theme can use to add your own.
 
 For end-user docs and screenshots, see [`readme.txt`](readme.txt). For the
 full architecture and design decisions, see [`PLAN.md`](PLAN.md).
 
 ## Why another visibility plugin?
 
-Two things set Block When apart from existing options:
+Two things set RenderWhen apart from existing options:
 
 1. **Server-side rendering only.** Hidden blocks return `''` from
    `render_block` and are never sent to the browser. No CSS `display: none`,
@@ -38,12 +38,12 @@ membership integrations today, [Conditional Blocks][cb] and
 Register a custom condition:
 
 ```php
-add_action( 'block_when_register_conditions', function ( $registry ) {
+add_action( 'renderwhen_register_conditions', function ( $registry ) {
     $registry->register( new My_Plugin\Conditions\Country_Condition() );
 } );
 ```
 
-Implement `Block_When\Conditions\Interface_Condition`:
+Implement `RenderWhen\Conditions\Interface_Condition`:
 
 ```php
 class Country_Condition implements Interface_Condition {
@@ -57,9 +57,9 @@ class Country_Condition implements Interface_Condition {
 }
 ```
 
-Filters: `block_when_register_conditions`,
-`block_when_evaluate_{condition_id}`, `block_when_render_block_hidden`,
-`block_when_device_type`. These are part of the public contract — semver
+Filters: `renderwhen_register_conditions`,
+`renderwhen_evaluate_{condition_id}`, `renderwhen_render_block_hidden`,
+`renderwhen_device_type`. These are part of the public contract — semver
 applies.
 
 ## Development
@@ -67,8 +67,8 @@ applies.
 Requires Node 20+, PHP 7.4+, Composer 2.x, and [Local](https://localwp.com/).
 
 ```bash
-git clone https://github.com/abhishekfdd/block-when.git
-cd block-when
+git clone https://github.com/abhishekfdd/renderwhen.git
+cd renderwhen
 npm install
 composer install
 npm run build
@@ -78,14 +78,14 @@ Symlink into your Local site:
 
 ```bash
 # macOS / Linux
-ln -s "$(pwd)" "/path/to/Local Sites/<site>/app/public/wp-content/plugins/block-when"
+ln -s "$(pwd)" "/path/to/Local Sites/<site>/app/public/wp-content/plugins/renderwhen"
 ```
 
 ```powershell
 # Windows — run PowerShell as Administrator
 New-Item -ItemType SymbolicLink `
-         -Path   "C:\Users\you\Local Sites\<site>\app\public\wp-content\plugins\block-when" `
-         -Target "C:\path\to\block-when"
+         -Path   "C:\Users\you\Local Sites\<site>\app\public\wp-content\plugins\renderwhen" `
+         -Target "C:\path\to\renderwhen"
 ```
 
 Activate in **wp-admin → Plugins**. Right-click the site in Local →
@@ -119,7 +119,7 @@ covers PHP 7.4 through 8.3.
 
 WordPress-VIP-Go for PHP, `@wordpress/eslint-plugin/recommended` for JS.
 Zero warnings on either before pushing. All user-facing strings
-internationalized with text domain `block-when`. Output late-escaped at
+internationalized with text domain `renderwhen`. Output late-escaped at
 the point of output.
 
 ## Contributing

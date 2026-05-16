@@ -6,12 +6,12 @@
  * by a third-party plugin — must implement to be accepted by the
  * Conditions_Registry.
  *
- * @package Block_When
+ * @package RenderWhen
  */
 
 declare( strict_types=1 );
 
-namespace Block_When\Conditions;
+namespace RenderWhen\Conditions;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -42,8 +42,8 @@ interface Interface_Condition {
 	 * Stable, machine-readable identifier for this condition.
 	 *
 	 * Used as the key in the Conditions_Registry, as the `type` value
-	 * stored on the block's `blockWhen` attribute, and as the suffix in
-	 * the `block_when_evaluate_{$id}` filter. Because all three of those
+	 * stored on the block's `renderWhen` attribute, and as the suffix in
+	 * the `renderwhen_evaluate_{$id}` filter. Because all three of those
 	 * are part of the public contract, the id is effectively a semver
 	 * surface — once shipped, do not change it.
 	 *
@@ -71,7 +71,7 @@ interface Interface_Condition {
 	 * "Date is within range".
 	 *
 	 * Implementations MUST localise the string via `__()` (or an
-	 * equivalent gettext function) using the `block-when` text domain
+	 * equivalent gettext function) using the `renderwhen` text domain
 	 * for built-ins, or the implementing plugin's own text domain for
 	 * third-party conditions.
 	 *
@@ -88,7 +88,7 @@ interface Interface_Condition {
 	 * `default`, and optionally `enum` / `items` / `properties`.
 	 *
 	 * The Attribute_Extender uses the returned schema to register each
-	 * condition's settings under `blockWhen.settings` on every block,
+	 * condition's settings under `renderWhen.settings` on every block,
 	 * which is what gives the editor's `useBlockProps` validation and
 	 * the REST API serialisation a stable contract.
 	 *
@@ -121,7 +121,7 @@ interface Interface_Condition {
 	 * block entirely (its HTML is replaced with an empty string before
 	 * it reaches the browser — it is not hidden via CSS).
 	 *
-	 * The `$settings` array is the slice of the block's `blockWhen`
+	 * The `$settings` array is the slice of the block's `renderWhen`
 	 * attribute that belongs to this condition, already validated
 	 * against `get_schema()`. Treat any missing/empty value as the
 	 * documented default; treat malformed input as "always visible"
@@ -141,7 +141,7 @@ interface Interface_Condition {
 	 * implementations should treat unknown keys as harmless.
 	 *
 	 * After this method returns, Block_Renderer applies the
-	 * `block_when_evaluate_{$id}` filter to the result, so site owners
+	 * `renderwhen_evaluate_{$id}` filter to the result, so site owners
 	 * and tests can override evaluation without subclassing.
 	 *
 	 * @param array<string, mixed> $settings Validated per-block settings

@@ -1,15 +1,12 @@
-
-Copy
-
 <?php
 /**
- * Uninstall handler for Block When.
+ * Uninstall handler for RenderWhen.
  *
  * This file runs when the user deletes the plugin from the Plugins screen
  * (not on deactivation). It must be safe to run on a site where the plugin
  * was never fully activated.
  *
- * v1.0 of Block When stores no options, no custom tables, no transients,
+ * v1.0 of RenderWhen stores no options, no custom tables, no transients,
  * and no user meta. Block visibility rules live in post content as block
  * attributes, which we deliberately leave alone — removing the plugin
  * should not modify the user's content.
@@ -18,7 +15,7 @@ Copy
  * uninstall behaviour is considered, and so that future versions adding
  * persistent data have an obvious place to clean up.
  *
- * @package Block_When
+ * @package RenderWhen
  */
  
 // Bail if WordPress is not invoking this file via the uninstall hook.

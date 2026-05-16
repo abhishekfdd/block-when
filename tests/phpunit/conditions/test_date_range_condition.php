@@ -1,15 +1,15 @@
 <?php
 /**
- * Tests for {@see Block_When\Conditions\Date_Range_Condition}.
+ * Tests for {@see RenderWhen\Conditions\Date_Range_Condition}.
  *
- * @package Block_When
+ * @package RenderWhen
  */
 
 declare( strict_types=1 );
 
-namespace Block_When\Tests\Conditions;
+namespace RenderWhen\Tests\Conditions;
 
-use Block_When\Conditions\Date_Range_Condition;
+use RenderWhen\Conditions\Date_Range_Condition;
 use DateTimeImmutable;
 use WP_UnitTestCase;
 
@@ -45,7 +45,7 @@ final class Test_Date_Range_Condition extends WP_UnitTestCase {
 	 */
 	public function tear_down(): void {
 		delete_option( 'timezone_string' );
-		remove_all_filters( 'block_when_date_range_now' );
+		remove_all_filters( 'renderwhen_date_range_now' );
 		parent::tear_down();
 	}
 
@@ -59,9 +59,9 @@ final class Test_Date_Range_Condition extends WP_UnitTestCase {
 	 * @return void
 	 */
 	private function pin_now( string $wall_clock ): void {
-		remove_all_filters( 'block_when_date_range_now' );
+		remove_all_filters( 'renderwhen_date_range_now' );
 		add_filter(
-			'block_when_date_range_now',
+			'renderwhen_date_range_now',
 			static function () use ( $wall_clock ): DateTimeImmutable {
 				return new DateTimeImmutable( $wall_clock, wp_timezone() );
 			}

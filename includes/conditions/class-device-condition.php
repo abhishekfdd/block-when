@@ -7,12 +7,12 @@
  * server-side, is cached per request, and is filterable so sites can
  * swap in an alternative detection library.
  *
- * @package Block_When
+ * @package RenderWhen
  */
 
 declare( strict_types=1 );
 
-namespace Block_When\Conditions;
+namespace RenderWhen\Conditions;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -48,7 +48,7 @@ final class Device_Condition extends Abstract_Condition {
 	 * {@inheritDoc}
 	 */
 	public function get_label(): string {
-		return __( 'Device type', 'block-when' );
+		return __( 'Device type', 'renderwhen' );
 	}
 
 	/**
@@ -112,7 +112,7 @@ final class Device_Condition extends Abstract_Condition {
 
 		/*
 		 * VIP-Go's caching sniffs flag the intentional design here:
-		 * Block When exists specifically to render device-specific
+		 * RenderWhen exists specifically to render device-specific
 		 * output server-side, which requires inspecting the User-
 		 * Agent and using `wp_is_mobile()`. Sites that use page
 		 * caching must vary the cache by device class — a caller
@@ -148,7 +148,7 @@ final class Device_Condition extends Abstract_Condition {
 		 * @param string $detected   One of 'desktop', 'tablet', 'mobile'.
 		 * @param string $user_agent The User-Agent string.
 		 */
-		$detected = apply_filters( 'block_when_device_type', $detected, $user_agent );
+		$detected = apply_filters( 'renderwhen_device_type', $detected, $user_agent );
 
 		self::$cached_device = is_string( $detected ) ? $detected : 'desktop';
 

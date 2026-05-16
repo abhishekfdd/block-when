@@ -13,12 +13,12 @@
  * "no constraint" and resolves to visible — consistent with the
  * "always visible on missing input" policy from Interface_Condition.
  *
- * @package Block_When
+ * @package RenderWhen
  */
 
 declare( strict_types=1 );
 
-namespace Block_When\Conditions;
+namespace RenderWhen\Conditions;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -43,7 +43,7 @@ final class User_State_Condition extends Abstract_Condition {
 	 * {@inheritDoc}
 	 */
 	public function get_label(): string {
-		return __( 'User state', 'block-when' );
+		return __( 'User state', 'renderwhen' );
 	}
 
 	/**

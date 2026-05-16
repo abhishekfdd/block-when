@@ -1,14 +1,14 @@
 /**
- * Block When — preview renderer.
+ * RenderWhen — preview renderer.
  *
  * BlockListBlock filter HOC that drives the "Preview as audience"
  * visualization. When the preview-mode store is active, this HOC reads
  * the simulated audience, evaluates each rule-bearing block against
  * that audience using the registered condition's editor-side
- * `evaluate()`, and adds the `block-when-preview-hidden` class to any
+ * `evaluate()`, and adds the `renderwhen-preview-hidden` class to any
  * block the rule would hide.
  *
- * The class is additive: it composes with `has-block-when-rule` from
+ * The class is additive: it composes with `has-renderwhen-rule` from
  * `editor-indicator.js`. The two flags answer different questions —
  * "this block has a rule" vs. "this block would be hidden right now in
  * preview" — so they live in separate filters that can be reasoned
@@ -33,7 +33,7 @@ import { STORE_NAME } from './store/preview-mode';
  * CSS class added to blocks that would be hidden for the simulated
  * audience. Paired with the styles in `editor.scss`.
  */
-const PREVIEW_HIDDEN_CLASS = 'block-when-preview-hidden';
+const PREVIEW_HIDDEN_CLASS = 'renderwhen-preview-hidden';
 
 /**
  * Inject the localised "Hidden in preview" badge label as a CSS custom
@@ -47,19 +47,19 @@ const PREVIEW_HIDDEN_CLASS = 'block-when-preview-hidden';
 function injectPreviewLabelStyle() {
 	if (
 		typeof document === 'undefined' ||
-		document.getElementById( 'block-when-preview-label' )
+		document.getElementById( 'renderwhen-preview-label' )
 	) {
 		return;
 	}
-	const label = __( 'Hidden in preview', 'block-when' );
+	const label = __( 'Hidden in preview', 'renderwhen' );
 	// Escape characters that would terminate or break the CSS string.
 	const escaped = label
 		.replace( /\\/g, '\\\\' )
 		.replace( /"/g, '\\"' )
 		.replace( /\n/g, '\\A ' );
 	const style = document.createElement( 'style' );
-	style.id = 'block-when-preview-label';
-	style.textContent = `:root { --block-when-preview-label: "${ escaped }"; }`;
+	style.id = 'renderwhen-preview-label';
+	style.textContent = `:root { --renderwhen-preview-label: "${ escaped }"; }`;
 	document.head.appendChild( style );
 }
 
@@ -78,11 +78,11 @@ injectPreviewLabelStyle();
  * @return {boolean} True when the block should be faded.
  */
 export function shouldHideInPreview( attributes, audience ) {
-	const blockWhen = attributes && attributes.blockWhen;
-	if ( ! blockWhen ) {
+	const renderWhen = attributes && attributes.renderWhen;
+	if ( ! renderWhen ) {
 		return false;
 	}
-	const conditionId = blockWhen.conditionId;
+	const conditionId = renderWhen.conditionId;
 	if ( typeof conditionId !== 'string' || conditionId === '' ) {
 		return false;
 	}
@@ -102,11 +102,11 @@ export function shouldHideInPreview( attributes, audience ) {
 				: 'desktop',
 		now: new Date(),
 	};
-	return ! condition.evaluate( blockWhen.settings || {}, previewContext );
+	return ! condition.evaluate( renderWhen.settings || {}, previewContext );
 }
 
 /**
- * HOC that adds `block-when-preview-hidden` to a faded block's wrapper.
+ * HOC that adds `renderwhen-preview-hidden` to a faded block's wrapper.
  *
  * Exported for the unit test. The runtime wiring happens via the
  * `addFilter` call below — importing this module is enough to register
@@ -139,6 +139,6 @@ export const withPreviewRenderer = createHigherOrderComponent(
 
 addFilter(
 	'editor.BlockListBlock',
-	'block-when/with-preview-renderer',
+	'renderwhen/with-preview-renderer',
 	withPreviewRenderer
 );

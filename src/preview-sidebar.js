@@ -1,12 +1,12 @@
 /**
- * Block When — "Preview as audience" sidebar.
+ * RenderWhen — "Preview as audience" sidebar.
  *
  * Registers an editor plugin via `@wordpress/plugins` that contributes a
  * `PluginSidebar` to the right-side icon strip. Inside, a single toggle
  * activates the preview simulation; while active, three controls drive
  * the simulated audience (logged-in flag, single role slug, device).
  *
- * Every control is wired through the `block-when/preview-mode` store,
+ * Every control is wired through the `renderwhen/preview-mode` store,
  * which the BlockListBlock filter in `preview-renderer.js` subscribes
  * to. This file holds no rendering logic of its own beyond the UI.
  *
@@ -36,18 +36,18 @@ const ANY_ROLE = '';
  * source from a constant in both places.
  */
 const ROLE_OPTIONS = [
-	{ value: ANY_ROLE, label: __( 'Any role', 'block-when' ) },
-	{ value: 'administrator', label: __( 'Administrator', 'block-when' ) },
-	{ value: 'editor', label: __( 'Editor', 'block-when' ) },
-	{ value: 'author', label: __( 'Author', 'block-when' ) },
-	{ value: 'contributor', label: __( 'Contributor', 'block-when' ) },
-	{ value: 'subscriber', label: __( 'Subscriber', 'block-when' ) },
+	{ value: ANY_ROLE, label: __( 'Any role', 'renderwhen' ) },
+	{ value: 'administrator', label: __( 'Administrator', 'renderwhen' ) },
+	{ value: 'editor', label: __( 'Editor', 'renderwhen' ) },
+	{ value: 'author', label: __( 'Author', 'renderwhen' ) },
+	{ value: 'contributor', label: __( 'Contributor', 'renderwhen' ) },
+	{ value: 'subscriber', label: __( 'Subscriber', 'renderwhen' ) },
 ];
 
 const DEVICE_OPTIONS = [
-	{ value: 'desktop', label: __( 'Desktop', 'block-when' ) },
-	{ value: 'tablet', label: __( 'Tablet', 'block-when' ) },
-	{ value: 'mobile', label: __( 'Mobile', 'block-when' ) },
+	{ value: 'desktop', label: __( 'Desktop', 'renderwhen' ) },
+	{ value: 'tablet', label: __( 'Tablet', 'renderwhen' ) },
+	{ value: 'mobile', label: __( 'Mobile', 'renderwhen' ) },
 ];
 
 const PreviewSidebar = () => {
@@ -63,16 +63,16 @@ const PreviewSidebar = () => {
 
 	return (
 		<PluginSidebar
-			name="block-when-preview"
-			title={ __( 'Block When', 'block-when' ) }
+			name="renderwhen-preview"
+			title={ __( 'RenderWhen', 'renderwhen' ) }
 			icon="visibility"
 		>
 			<PanelBody>
 				<ToggleControl
-					label={ __( 'Preview as audience', 'block-when' ) }
+					label={ __( 'Preview as audience', 'renderwhen' ) }
 					help={ __(
 						'Fade blocks whose visibility rule would hide them for the audience below. Editor-only — the saved post and front-end are unaffected.',
-						'block-when'
+						'renderwhen'
 					) }
 					checked={ active }
 					onChange={ setPreviewActive }
@@ -81,7 +81,7 @@ const PreviewSidebar = () => {
 				{ active && (
 					<>
 						<ToggleControl
-							label={ __( 'Logged in', 'block-when' ) }
+							label={ __( 'Logged in', 'renderwhen' ) }
 							checked={ audience.loggedIn }
 							onChange={ ( loggedIn ) =>
 								setAudience( { loggedIn } )
@@ -89,7 +89,7 @@ const PreviewSidebar = () => {
 							__nextHasNoMarginBottom
 						/>
 						<SelectControl
-							label={ __( 'Role', 'block-when' ) }
+							label={ __( 'Role', 'renderwhen' ) }
 							value={
 								audience.role === null
 									? ANY_ROLE
@@ -105,7 +105,7 @@ const PreviewSidebar = () => {
 							__next40pxDefaultSize
 						/>
 						<SelectControl
-							label={ __( 'Device', 'block-when' ) }
+							label={ __( 'Device', 'renderwhen' ) }
 							value={ audience.device }
 							options={ DEVICE_OPTIONS }
 							onChange={ ( device ) => setAudience( { device } ) }
@@ -119,7 +119,7 @@ const PreviewSidebar = () => {
 	);
 };
 
-registerPlugin( 'block-when-preview-sidebar', {
+registerPlugin( 'renderwhen-preview-sidebar', {
 	render: PreviewSidebar,
 	icon: 'visibility',
 } );

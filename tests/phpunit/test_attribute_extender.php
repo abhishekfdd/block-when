@@ -1,15 +1,15 @@
 <?php
 /**
- * Tests for {@see Block_When\Attribute_Extender}.
+ * Tests for {@see RenderWhen\Attribute_Extender}.
  *
- * @package Block_When
+ * @package RenderWhen
  */
 
 declare( strict_types=1 );
 
-namespace Block_When\Tests;
+namespace RenderWhen\Tests;
 
-use Block_When\Attribute_Extender;
+use RenderWhen\Attribute_Extender;
 use WP_Block_Type_Registry;
 use WP_UnitTestCase;
 
@@ -26,7 +26,7 @@ final class Test_Attribute_Extender extends WP_UnitTestCase {
 	 * Block name used by tests that drive the real
 	 * `register_block_type()` API.
 	 */
-	private const TEST_BLOCK = 'block-when-test/extender';
+	private const TEST_BLOCK = 'renderwhen-test/extender';
 
 	/**
 	 * Extender under test.
@@ -69,7 +69,7 @@ final class Test_Attribute_Extender extends WP_UnitTestCase {
 	 *
 	 * @return array<string, mixed>
 	 */
-	private function expected_block_when_schema(): array {
+	private function expected_render_when_schema(): array {
 		return array(
 			'type'       => 'object',
 			'default'    => null,
@@ -85,7 +85,7 @@ final class Test_Attribute_Extender extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Block args without an `attributes` key gain one containing only `blockWhen`.
+	 * Block args without an `attributes` key gain one containing only `renderWhen`.
 	 */
 	public function test_filter_creates_attributes_array_when_absent(): void {
 		$args = array( 'render_callback' => '__return_empty_string' );
@@ -94,7 +94,7 @@ final class Test_Attribute_Extender extends WP_UnitTestCase {
 
 		$this->assertArrayHasKey( 'attributes', $filtered );
 		$this->assertSame(
-			array( 'blockWhen' => $this->expected_block_when_schema() ),
+			array( 'renderWhen' => $this->expected_render_when_schema() ),
 			$filtered['attributes']
 		);
 		// Non-attributes keys are passed through unchanged.
@@ -102,7 +102,7 @@ final class Test_Attribute_Extender extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Existing attributes are preserved and `blockWhen` is added alongside.
+	 * Existing attributes are preserved and `renderWhen` is added alongside.
 	 */
 	public function test_filter_preserves_existing_attributes(): void {
 		$args = array(
@@ -129,23 +129,23 @@ final class Test_Attribute_Extender extends WP_UnitTestCase {
 			$filtered['attributes']['level']
 		);
 		$this->assertSame(
-			$this->expected_block_when_schema(),
-			$filtered['attributes']['blockWhen']
+			$this->expected_render_when_schema(),
+			$filtered['attributes']['renderWhen']
 		);
 	}
 
 	/**
-	 * A pre-existing `blockWhen` attribute is replaced — last-write-wins.
+	 * A pre-existing `renderWhen` attribute is replaced — last-write-wins.
 	 *
 	 * Documented as a deliberate choice in Attribute_Extender: the
 	 * renderer reads the attribute by name and a foreign shape would
 	 * silently break visibility rules, so a deterministic overwrite
 	 * is safer than a merge.
 	 */
-	public function test_filter_overwrites_pre_existing_block_when(): void {
+	public function test_filter_overwrites_pre_existing_render_when(): void {
 		$args = array(
 			'attributes' => array(
-				'blockWhen' => array(
+				'renderWhen' => array(
 					'type'    => 'string',
 					'default' => 'foreign-value',
 				),
@@ -155,8 +155,8 @@ final class Test_Attribute_Extender extends WP_UnitTestCase {
 		$filtered = $this->extender->filter_register_block_type_args( $args, 'core/test' );
 
 		$this->assertSame(
-			$this->expected_block_when_schema(),
-			$filtered['attributes']['blockWhen']
+			$this->expected_render_when_schema(),
+			$filtered['attributes']['renderWhen']
 		);
 	}
 
@@ -223,8 +223,8 @@ final class Test_Attribute_Extender extends WP_UnitTestCase {
 			$registered->attributes['caption']
 		);
 		$this->assertSame(
-			$this->expected_block_when_schema(),
-			$registered->attributes['blockWhen']
+			$this->expected_render_when_schema(),
+			$registered->attributes['renderWhen']
 		);
 	}
 }

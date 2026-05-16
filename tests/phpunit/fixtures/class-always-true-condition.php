@@ -5,14 +5,14 @@
  * Lets renderer tests assert "block visible" behaviour without relying on
  * the side-effects of any real condition (timezone, current user, device).
  *
- * @package Block_When
+ * @package RenderWhen
  */
 
 declare( strict_types=1 );
 
-namespace Block_When\Tests\Fixtures;
+namespace RenderWhen\Tests\Fixtures;
 
-use Block_When\Conditions\Abstract_Condition;
+use RenderWhen\Conditions\Abstract_Condition;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -22,7 +22,7 @@ defined( 'ABSPATH' ) || exit;
 final class Always_True_Condition extends Abstract_Condition {
 
 	/**
-	 * Stable id used in test `blockWhen.conditionId` attributes.
+	 * Stable id used in test `renderWhen.conditionId` attributes.
 	 */
 	public const ID = 'fixture/always_true';
 

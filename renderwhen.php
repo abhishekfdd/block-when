@@ -1,7 +1,7 @@
 <?php
 /**
- * Plugin Name:       Block When
- * Plugin URI:        https://github.com/abhishekfdd/block-when
+ * Plugin Name:       RenderWhen for Blocks
+ * Plugin URI:        https://github.com/abhishekfdd/renderwhen
  * Description:       Show or hide any block when conditions match. Three built-in conditions, an extensible developer API, and true server-side rendering — hidden blocks are never sent to the browser.
  * Version:           1.0.0
  * Requires at least: 6.5
@@ -10,14 +10,14 @@
  * Author URI:        https://confusedblogger.com
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       block-when
+ * Text Domain:       renderwhen
  *
- * @package Block_When
+ * @package RenderWhen
  */
 
 declare( strict_types=1 );
 
-namespace Block_When;
+namespace RenderWhen;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -26,28 +26,28 @@ defined( 'ABSPATH' ) || exit;
  *
  * Its only responsibilities are:
  *   1. Define plugin constants.
- *   2. Register a hand-written PSR-4 autoloader for Block_When\ classes,
+ *   2. Register a hand-written PSR-4 autoloader for RenderWhen\ classes,
  *      following the WPCS file-naming conventions used in includes/.
- *   3. Hand off to Block_When\Plugin::instance()->init().
+ *   3. Hand off to RenderWhen\Plugin::instance()->init().
  *
  * Reviewers and contributors looking for behaviour should start in
  * includes/class-plugin.php — that is the orchestrator.
  */
 
 // Plugin constants.
-define( 'BLOCK_WHEN_VERSION', '1.0.0' );
-define( 'BLOCK_WHEN_FILE', __FILE__ );
-define( 'BLOCK_WHEN_DIR', plugin_dir_path( __FILE__ ) );
-define( 'BLOCK_WHEN_URL', plugin_dir_url( __FILE__ ) );
-define( 'BLOCK_WHEN_BASENAME', plugin_basename( __FILE__ ) );
-define( 'BLOCK_WHEN_MIN_PHP', '7.4' );
-define( 'BLOCK_WHEN_MIN_WP', '6.5' );
+define( 'RENDERWHEN_VERSION', '1.0.0' );
+define( 'RENDERWHEN_FILE', __FILE__ );
+define( 'RENDERWHEN_DIR', plugin_dir_path( __FILE__ ) );
+define( 'RENDERWHEN_URL', plugin_dir_url( __FILE__ ) );
+define( 'RENDERWHEN_BASENAME', plugin_basename( __FILE__ ) );
+define( 'RENDERWHEN_MIN_PHP', '7.4' );
+define( 'RENDERWHEN_MIN_WP', '6.5' );
 
 // Bootstrap inside a closure to avoid leaking variables into the global scope.
 ( static function (): void {
 	spl_autoload_register(
 		static function ( string $class_name ): void {
-			$prefix = 'Block_When\\';
+			$prefix = 'RenderWhen\\';
 
 			if ( 0 !== strpos( $class_name, $prefix ) ) {
 				return;
@@ -57,7 +57,7 @@ define( 'BLOCK_WHEN_MIN_WP', '6.5' );
 			$segments = explode( '\\', $relative );
 			$leaf     = array_pop( $segments );
 
-			$directory = BLOCK_WHEN_DIR . 'includes/';
+			$directory = RENDERWHEN_DIR . 'includes/';
 			if ( ! empty( $segments ) ) {
 				$directory .= strtolower( str_replace( '_', '-', implode( '/', $segments ) ) ) . '/';
 			}

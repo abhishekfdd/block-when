@@ -1,5 +1,5 @@
 {
-	"name": "block-when/block-when",
+	"name": "abhishekfdd/renderwhen",
 	"description": "Show or hide any block when conditions match — server-side, with a public Conditions API.",
 	"type": "wordpress-plugin",
 	"license": "GPL-2.0-or-later",

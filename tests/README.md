@@ -1,4 +1,4 @@
-# Block When — Tests
+# RenderWhen for Blocks — Tests
 
 ## Running the suite
 
@@ -57,7 +57,7 @@ match this developer's Local install. Override on CI / other machines:
 | `WP_TESTS_ABSPATH`      | `<repo>/../../../` (i.e. Local's WordPress at `app/public`) |
 | `WP_TESTS_DOMAIN`       | `example.org`                                               |
 | `WP_TESTS_EMAIL`        | `admin@example.org`                                         |
-| `WP_TESTS_TITLE`        | `Block When Test Site`                                      |
+| `WP_TESTS_TITLE`        | `RenderWhen Test Site`                                      |
 
 CI example (TCP, no Local socket):
 

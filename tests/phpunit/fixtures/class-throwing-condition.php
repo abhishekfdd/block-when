@@ -6,14 +6,14 @@
  * branch keeps the page rendering even when a misbehaving condition
  * throws under it.
  *
- * @package Block_When
+ * @package RenderWhen
  */
 
 declare( strict_types=1 );
 
-namespace Block_When\Tests\Fixtures;
+namespace RenderWhen\Tests\Fixtures;
 
-use Block_When\Conditions\Abstract_Condition;
+use RenderWhen\Conditions\Abstract_Condition;
 use RuntimeException;
 
 defined( 'ABSPATH' ) || exit;
@@ -24,7 +24,7 @@ defined( 'ABSPATH' ) || exit;
 final class Throwing_Condition extends Abstract_Condition {
 
 	/**
-	 * Stable id used in test `blockWhen.conditionId` attributes.
+	 * Stable id used in test `renderWhen.conditionId` attributes.
 	 */
 	public const ID = 'fixture/throwing';
 

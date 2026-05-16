@@ -1,5 +1,5 @@
 /**
- * Block When — user-state condition (editor).
+ * RenderWhen — user-state condition (editor).
  *
  * Editor-side counterpart of `User_State_Condition`. Provides the
  * settings UI rendered inside the Visibility panel and registers the
@@ -47,11 +47,11 @@ const MODE_ROLES = 'roles';
  * @type {{ slug: string, label: string }[]}
  */
 const DEFAULT_ROLES = [
-	{ slug: 'administrator', label: __( 'Administrator', 'block-when' ) },
-	{ slug: 'editor', label: __( 'Editor', 'block-when' ) },
-	{ slug: 'author', label: __( 'Author', 'block-when' ) },
-	{ slug: 'contributor', label: __( 'Contributor', 'block-when' ) },
-	{ slug: 'subscriber', label: __( 'Subscriber', 'block-when' ) },
+	{ slug: 'administrator', label: __( 'Administrator', 'renderwhen' ) },
+	{ slug: 'editor', label: __( 'Editor', 'renderwhen' ) },
+	{ slug: 'author', label: __( 'Author', 'renderwhen' ) },
+	{ slug: 'contributor', label: __( 'Contributor', 'renderwhen' ) },
+	{ slug: 'subscriber', label: __( 'Subscriber', 'renderwhen' ) },
 ];
 
 /**
@@ -165,20 +165,20 @@ export function UserStateSettings( { settings, onChange } ) {
 	return (
 		<>
 			<SelectControl
-				label={ __( 'Show this block to', 'block-when' ) }
+				label={ __( 'Show this block to', 'renderwhen' ) }
 				value={ mode }
 				options={ [
 					{
 						value: MODE_LOGGED_IN,
-						label: __( 'Logged-in users', 'block-when' ),
+						label: __( 'Logged-in users', 'renderwhen' ),
 					},
 					{
 						value: MODE_LOGGED_OUT,
-						label: __( 'Logged-out users', 'block-when' ),
+						label: __( 'Logged-out users', 'renderwhen' ),
 					},
 					{
 						value: MODE_ROLES,
-						label: __( 'Specific roles', 'block-when' ),
+						label: __( 'Specific roles', 'renderwhen' ),
 					},
 				] }
 				onChange={ handleModeChange }
@@ -187,7 +187,7 @@ export function UserStateSettings( { settings, onChange } ) {
 			/>
 			{ mode === MODE_ROLES && (
 				<FormTokenField
-					label={ __( 'Roles', 'block-when' ) }
+					label={ __( 'Roles', 'renderwhen' ) }
 					value={ statesToRoleLabels( states ) }
 					suggestions={ roleSuggestions }
 					onChange={ handleRolesChange }
@@ -265,7 +265,7 @@ export function evaluate( settings, previewContext ) {
 
 registerCondition( {
 	id: 'user_state',
-	label: __( 'User state', 'block-when' ),
+	label: __( 'User state', 'renderwhen' ),
 	SettingsComponent: UserStateSettings,
 	defaultSettings: () => ( { states: [ 'logged_in' ] } ),
 	evaluate,

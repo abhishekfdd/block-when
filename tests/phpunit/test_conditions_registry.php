@@ -1,17 +1,17 @@
 <?php
 /**
- * Tests for {@see Block_When\Conditions_Registry}.
+ * Tests for {@see RenderWhen\Conditions_Registry}.
  *
- * @package Block_When
+ * @package RenderWhen
  */
 
 declare( strict_types=1 );
 
-namespace Block_When\Tests;
+namespace RenderWhen\Tests;
 
-use Block_When\Conditions\Abstract_Condition;
-use Block_When\Conditions\Interface_Condition;
-use Block_When\Conditions_Registry;
+use RenderWhen\Conditions\Abstract_Condition;
+use RenderWhen\Conditions\Interface_Condition;
+use RenderWhen\Conditions_Registry;
 use ReflectionClass;
 use WP_UnitTestCase;
 
@@ -142,14 +142,14 @@ final class Test_Conditions_Registry extends WP_UnitTestCase {
 	}
 
 	/**
-	 * bootstrap() fires `block_when_register_conditions` with the registry.
+	 * bootstrap() fires `renderwhen_register_conditions` with the registry.
 	 */
 	public function test_bootstrap_fires_action_with_registry_instance(): void {
 		$registry = Conditions_Registry::instance();
 		$received = null;
 
 		add_action(
-			'block_when_register_conditions',
+			'renderwhen_register_conditions',
 			static function ( $passed ) use ( &$received ): void {
 				$received = $passed;
 			}
@@ -168,7 +168,7 @@ final class Test_Conditions_Registry extends WP_UnitTestCase {
 		$count    = 0;
 
 		add_action(
-			'block_when_register_conditions',
+			'renderwhen_register_conditions',
 			static function () use ( &$count ): void {
 				++$count;
 			}

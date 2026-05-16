@@ -1,6 +1,6 @@
 <?php
 /**
- * PHPUnit bootstrap for Block When.
+ * PHPUnit bootstrap for RenderWhen.
  *
  * Wires up Composer autoload, points wp-phpunit at our wp-tests-config.php,
  * loads the plugin during the WP test bootstrap, and hands off to
@@ -12,7 +12,7 @@
  * process boundary. See wp-tests-config.php for the constants the
  * suite needs.
  *
- * @package Block_When
+ * @package RenderWhen
  */
 
 declare( strict_types=1 );
@@ -24,10 +24,10 @@ declare( strict_types=1 );
 // Composer autoloader (plugin classes + PHPUnit Polyfills).
 require_once dirname( __DIR__, 2 ) . '/vendor/autoload.php';
 
-$block_when_plugin_root  = dirname( __DIR__, 2 );
-$block_when_wp_tests_dir = $block_when_plugin_root . '/vendor/wp-phpunit/wp-phpunit';
+$renderwhen_plugin_root  = dirname( __DIR__, 2 );
+$renderwhen_wp_tests_dir = $renderwhen_plugin_root . '/vendor/wp-phpunit/wp-phpunit';
 
-if ( ! file_exists( $block_when_wp_tests_dir . '/includes/functions.php' ) ) {
+if ( ! file_exists( $renderwhen_wp_tests_dir . '/includes/functions.php' ) ) {
 	echo "Could not find WordPress test suite. Did you run `composer install`?" . PHP_EOL;
 	exit( 1 );
 }
@@ -35,7 +35,7 @@ if ( ! file_exists( $block_when_wp_tests_dir . '/includes/functions.php' ) ) {
 // Tell wp-phpunit where to find our config (used by both the parent
 // process AND the install.php child process).
 defined( 'WP_TESTS_CONFIG_FILE_PATH' )
-	|| define( 'WP_TESTS_CONFIG_FILE_PATH', $block_when_plugin_root . '/wp-tests-config.php' );
+	|| define( 'WP_TESTS_CONFIG_FILE_PATH', $renderwhen_plugin_root . '/wp-tests-config.php' );
 
 if ( ! file_exists( WP_TESTS_CONFIG_FILE_PATH ) ) {
 	printf(
@@ -49,10 +49,10 @@ if ( ! file_exists( WP_TESTS_CONFIG_FILE_PATH ) ) {
 // PHPUnit Polyfills location, so wp-phpunit's install.php can find them
 // in our local vendor directory rather than expecting the WP core layout.
 defined( 'WP_TESTS_PHPUNIT_POLYFILLS_PATH' )
-	|| define( 'WP_TESTS_PHPUNIT_POLYFILLS_PATH', $block_when_plugin_root . '/vendor/yoast/phpunit-polyfills' );
+	|| define( 'WP_TESTS_PHPUNIT_POLYFILLS_PATH', $renderwhen_plugin_root . '/vendor/yoast/phpunit-polyfills' );
 
 // Give us access to tests_add_filter() before WP boots.
-require_once $block_when_wp_tests_dir . '/includes/functions.php';
+require_once $renderwhen_wp_tests_dir . '/includes/functions.php';
 
 /**
  * Manually load the plugin before WP finishes booting, so its hooks
@@ -60,10 +60,10 @@ require_once $block_when_wp_tests_dir . '/includes/functions.php';
  */
 tests_add_filter(
 	'muplugins_loaded',
-	static function () use ( $block_when_plugin_root ): void {
-		require $block_when_plugin_root . '/block-when.php';
+	static function () use ( $renderwhen_plugin_root ): void {
+		require $renderwhen_plugin_root . '/renderwhen.php';
 	}
 );
 
 // Start up the WP testing environment.
-require $block_when_wp_tests_dir . '/includes/bootstrap.php';
+require $renderwhen_wp_tests_dir . '/includes/bootstrap.php';

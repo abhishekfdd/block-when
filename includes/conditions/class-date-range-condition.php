@@ -6,12 +6,12 @@
  * `[start, end]` window. Either bound may be null (open-ended) and
  * both bounds are inclusive.
  *
- * @package Block_When
+ * @package RenderWhen
  */
 
 declare( strict_types=1 );
 
-namespace Block_When\Conditions;
+namespace RenderWhen\Conditions;
 
 use DateTimeImmutable;
 
@@ -48,7 +48,7 @@ final class Date_Range_Condition extends Abstract_Condition {
 	 * {@inheritDoc}
 	 */
 	public function get_label(): string {
-		return __( 'Date range', 'block-when' );
+		return __( 'Date range', 'renderwhen' );
 	}
 
 	/**
@@ -76,7 +76,7 @@ final class Date_Range_Condition extends Abstract_Condition {
 	 * {@inheritDoc}
 	 *
 	 * Returns true when the current moment (as reported by
-	 * `current_datetime()`, filterable via `block_when_date_range_now`)
+	 * `current_datetime()`, filterable via `renderwhen_date_range_now`)
 	 * is inside the inclusive `[start, end]` window. Either bound may
 	 * be null; both null means "always visible". Unparseable bounds
 	 * are also treated as open-ended on that side.
@@ -100,7 +100,7 @@ final class Date_Range_Condition extends Abstract_Condition {
 		 *
 		 * @param DateTimeImmutable $now Current site-time moment.
 		 */
-		$now = apply_filters( 'block_when_date_range_now', current_datetime() );
+		$now = apply_filters( 'renderwhen_date_range_now', current_datetime() );
 
 		if ( $this->is_bound( $start ) ) {
 			$parsed = DateTimeImmutable::createFromFormat( self::BOUND_FORMAT, $start, $site_tz );

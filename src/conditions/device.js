@@ -1,5 +1,5 @@
 /**
- * Block When — device-type condition (editor).
+ * RenderWhen — device-type condition (editor).
  *
  * Editor-side counterpart of `Device_Condition`. Three CheckboxControls
  * — Desktop, Tablet, Mobile — drive the persisted settings shape:
@@ -52,19 +52,19 @@ export function DeviceSettings( { settings, onChange } ) {
 	return (
 		<>
 			<CheckboxControl
-				label={ __( 'Desktop', 'block-when' ) }
+				label={ __( 'Desktop', 'renderwhen' ) }
 				checked={ devices.includes( 'desktop' ) }
 				onChange={ toggle( 'desktop' ) }
 				__nextHasNoMarginBottom
 			/>
 			<CheckboxControl
-				label={ __( 'Tablet', 'block-when' ) }
+				label={ __( 'Tablet', 'renderwhen' ) }
 				checked={ devices.includes( 'tablet' ) }
 				onChange={ toggle( 'tablet' ) }
 				__nextHasNoMarginBottom
 			/>
 			<CheckboxControl
-				label={ __( 'Mobile', 'block-when' ) }
+				label={ __( 'Mobile', 'renderwhen' ) }
 				checked={ devices.includes( 'mobile' ) }
 				onChange={ toggle( 'mobile' ) }
 				__nextHasNoMarginBottom
@@ -96,7 +96,7 @@ export function evaluate( settings, previewContext ) {
 
 registerCondition( {
 	id: 'device',
-	label: __( 'Device type', 'block-when' ),
+	label: __( 'Device type', 'renderwhen' ),
 	SettingsComponent: DeviceSettings,
 	defaultSettings: () => ( { devices: [ 'desktop', 'tablet', 'mobile' ] } ),
 	evaluate,

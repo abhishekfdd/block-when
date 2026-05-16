@@ -12,18 +12,18 @@
  *
  *   1. Plugin boot creates the registry and registers built-ins.
  *   2. Plugin boot calls {@see bootstrap()}, which fires the
- *      `block_when_register_conditions` action so third-party plugins
+ *      `renderwhen_register_conditions` action so third-party plugins
  *      can register their own conditions against this instance.
  *   3. Subsequent calls to bootstrap() are no-ops.
  *
- * @package Block_When
+ * @package RenderWhen
  */
 
 declare( strict_types=1 );
 
-namespace Block_When;
+namespace RenderWhen;
 
-use Block_When\Conditions\Interface_Condition;
+use RenderWhen\Conditions\Interface_Condition;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -47,7 +47,7 @@ final class Conditions_Registry {
 	private array $conditions = array();
 
 	/**
-	 * Whether `block_when_register_conditions` has already fired.
+	 * Whether `renderwhen_register_conditions` has already fired.
 	 *
 	 * @var bool
 	 */
@@ -123,7 +123,7 @@ final class Conditions_Registry {
 	}
 
 	/**
-	 * Fire the `block_when_register_conditions` extension hook once.
+	 * Fire the `renderwhen_register_conditions` extension hook once.
 	 *
 	 * Plugin orchestration calls this after registering built-ins so
 	 * third-party plugins can register their own conditions against
@@ -146,6 +146,6 @@ final class Conditions_Registry {
 		 *
 		 * @param Conditions_Registry $registry The registry instance.
 		 */
-		do_action( 'block_when_register_conditions', $this );
+		do_action( 'renderwhen_register_conditions', $this );
 	}
 }

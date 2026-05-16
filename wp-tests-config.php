@@ -1,6 +1,6 @@
 <?php
 /**
- * WordPress test-suite configuration for Block When.
+ * WordPress test-suite configuration for RenderWhen.
  *
  * Loaded by wp-phpunit's `bootstrap.php` AND by its `install.php` child
  * process. install.php is spawned via `system( WP_PHP_BINARY ... )` with
@@ -20,13 +20,13 @@
  *   WP_TESTS_ABSPATH      WordPress core path     (default: ../../../)
  *   WP_TESTS_DOMAIN       Test domain             (default: example.org)
  *   WP_TESTS_EMAIL        Admin email             (default: admin@example.org)
- *   WP_TESTS_TITLE        Site title              (default: Block When Test Site)
+ *   WP_TESTS_TITLE        Site title              (default: RenderWhen Test Site)
  *
  * The test suite drops and rebuilds tables prefixed with `wptests_` on
  * every run, so it must point at a database OTHER than the live `local`
  * database — `wordpress_test` is the convention.
  *
- * @package Block_When
+ * @package RenderWhen
  */
 
 declare( strict_types=1 );
@@ -40,7 +40,7 @@ declare( strict_types=1 );
 
 // Path to the WordPress install (the test suite loads wp-settings.php
 // from here). Default targets the Local install three levels up from
-// this plugin directory: block-when -> plugins -> wp-content -> public.
+// this plugin directory: renderwhen -> plugins -> wp-content -> public.
 if ( ! defined( 'ABSPATH' ) ) {
 	define(
 		'ABSPATH',
@@ -64,7 +64,7 @@ define( 'DB_COLLATE',  '' );
 // Test-suite metadata.
 define( 'WP_TESTS_DOMAIN', getenv( 'WP_TESTS_DOMAIN' ) ?: 'example.org' );
 define( 'WP_TESTS_EMAIL',  getenv( 'WP_TESTS_EMAIL' )  ?: 'admin@example.org' );
-define( 'WP_TESTS_TITLE',  getenv( 'WP_TESTS_TITLE' )  ?: 'Block When Test Site' );
+define( 'WP_TESTS_TITLE',  getenv( 'WP_TESTS_TITLE' )  ?: 'RenderWhen Test Site' );
 
 // PHP binary used by wp-phpunit when it spawns install.php.
 define( 'WP_PHP_BINARY', 'php' );
